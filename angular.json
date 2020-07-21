@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "vocabulary"
+    }
+  },
+  "defaultProject": "vocabulary",
+  "cli": {
+    "analytics": false
+  }
 }

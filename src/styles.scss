@@ -1,1 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/scss/bootstrap";
+@import "~ngx-toastr/toastr";
+
+$fa-font-path: "../node_modules/font-awesome/fonts";
+@import "../node_modules/font-awesome/scss/font-awesome.scss";
+
+@import "https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap";
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+@import "~@angular/material/theming";
+@include mat-core();
+
+$primary: mat-palette($mat-cyan, 700);
+$accent: mat-palette($mat-pink, A200, A100, A400);
+$background-color: map_get($mat-cyan, 100);
+
+$candy-app-warn: mat-palette($mat-red);
+
+$theme: mat-light-theme($primary, $accent);
+
+$background: map-get($theme, background);
+$background: map_merge(
+  $background,
+  (
+    background: $background-color,
+  )
+);
+$theme: map_merge(
+  $theme,
+  (
+    background: $background,
+  )
+);
+
+@include angular-material-theme($theme);
+
+$primary-button: mat-palette($mat-cyan, 600);
+
+$accent-button: mat-palette($mat-pink, A200, A100, A400);
+$theme-button: mat-light-theme($primary-button, $accent-button);
+
+@include mat-button-theme($theme-button);
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
