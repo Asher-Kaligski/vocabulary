@@ -1,3 +1,4 @@
+import { VocabularyModule } from './vocabulary/vocabulary.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -33,6 +34,7 @@ import { SharedModule } from './shared/shared.module';
     MembershipModule,
     CoreModule,
     AppRoutingModule,
+    VocabularyModule,
     FlexLayoutModule,
     ToastrModule.forRoot({
       timeOut: 2000,

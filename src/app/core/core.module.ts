@@ -1,3 +1,4 @@
+import { VocabularyModule } from './../vocabulary/vocabulary.module';
 import { SharedModule } from './../shared/shared.module';
 import { MaterialModule } from './../shared/material.module';
 import { CoreRoutingModule } from './core-routing.module';
@@ -21,6 +22,7 @@ import { HomeComponent } from './components/home/home.component';
   imports: [
     CommonModule,
     CoreRoutingModule,
+    VocabularyModule,
     NgbModule,
     MaterialModule,
     SharedModule,

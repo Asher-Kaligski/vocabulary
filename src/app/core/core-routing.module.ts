@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NoAccessComponent } from './components/no-access/no-access.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  // { path: '', component: HomeComponent },
   { path: 'no-access', component: NoAccessComponent },
 ];
 

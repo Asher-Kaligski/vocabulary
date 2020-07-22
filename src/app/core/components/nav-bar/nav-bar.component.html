@@ -5,7 +5,11 @@
     class="example-icon"
     aria-label="Example icon-button with menu icon"
   >
-    <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+    <mat-icon
+      *ngIf="media.isActive('sm') || media.isActive('xs')"
+      (click)="sidenav.toggle()"
+      >menu</mat-icon
+    >
   </button>
 
   <a
@@ -98,36 +102,37 @@
         routerLink="/my/orders"
         routerLinkActive="active-list-item"
         (click)="sidenav.toggle()"
-        ><h2 matLine>My Orders</h2>
-        <mat-icon matListIcon>touch_app</mat-icon></a
-      >
+        ><h2 matLine>M</h2>
+      </a>
       <ng-container
         *ngIf="authService.currentUser.roles.includes('FARM_OWNER')"
       >
         <a
+          *ngFor="let l of letters"
+          class="font-weight-bold"
+          mat-list-item
+          routerLink="/letter-a"
+          routerLinkActive="active-list-item"
+          (click)="sidenav.toggle()"
+          ><h2 matLine>{{ l }}</h2>
+        </a>
+        <!-- <a
+      class="font-weight-bold"
+          mat-list-item
+          routerLink="/letter-b"
+          routerLinkActive="active-list-item"
+          (click)="sidenav.toggle()"
+          ><h2 matLine>Letter-B</h2>
+          <mat-icon matListIcon>shopping_basket</mat-icon></a
+        > -->
+        <!--  <a
           mat-list-item
           routerLink="/farm/update-farm"
           routerLinkActive="active-list-item"
           (click)="sidenav.toggle()"
           ><h2 matLine>Farm Details</h2>
           <mat-icon matListIcon>add_business</mat-icon></a
-        >
-        <a
-          mat-list-item
-          routerLink="/farm/products"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>Farm Products</h2>
-          <mat-icon matListIcon>shopping_basket</mat-icon></a
-        >
-        <a
-          mat-list-item
-          routerLink="/farm/orders"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>Farm Orders</h2>
-          <mat-icon matListIcon>list</mat-icon></a
-        >
+        >-->
       </ng-container>
 
       <ng-container *ngIf="authService.currentUser.roles.includes('ADMIN')">
@@ -160,7 +165,8 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div style="height: 88vh;">
-      <router-outlet></router-outlet>
+      <!-- <router-outlet></router-outlet> -->
+      <app-home></app-home>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
