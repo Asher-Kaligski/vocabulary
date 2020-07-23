@@ -1,20 +1,21 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col">
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
     <div
       *ngIf="!media.isActive('sm') && !media.isActive('xs')"
       class="col-1 menu p-0"
-      
     >
       <ul class="list-group">
-        <a *ngFor="let l of letters"
-        routerLink="/letter-a" routerLinkActive
-        class="list-group-item font-weight-bold">
-            {{ l }}  
-          </a>
-       
+        <a
+          *ngFor="let l of letters; index as i"
+          routerLink="/letter" [queryParams]="{letter: l, id:i}"
+          routerLinkActive="active-list-item"
+          class="list-group-item font-weight-bold"
+        >
+          {{ l }}
+        </a>
       </ul>
     </div>
   </div>

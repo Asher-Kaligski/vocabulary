@@ -1,15 +1,24 @@
 .menu {
   background-color: grey;
   
-  overflow-y: scroll;
-  height: 88vh;
+   overflow-y: scroll;
+   height: 88vh;
 }
 
 .row {
-  height: 88vh;
+   height: 88vh;
   // margin-top: 6.5%;
   
 }
+
+.active-list-item {
+  color: #0097a7 !important;
+}
+
+.list-group-item{
+  color: black;
+}
+
 
 .list-group-item {
   text-align: center;

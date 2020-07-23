@@ -10,9 +10,9 @@ $fa-font-path: "../node_modules/font-awesome/fonts";
 @import "~@angular/material/theming";
 @include mat-core();
 
-$primary: mat-palette($mat-cyan, 700);
+$primary: mat-palette($mat-amber, 500);
 $accent: mat-palette($mat-pink, A200, A100, A400);
-$background-color: map_get($mat-cyan, 100);
+$background-color: map_get($mat-amber, A100);
 
 $candy-app-warn: mat-palette($mat-red);
 
