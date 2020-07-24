@@ -9,12 +9,13 @@
     >
       <ul class="list-group">
         <a
-          *ngFor="let l of letters; index as i"
-          routerLink="/letter" [queryParams]="{letter: l, id:i}"
+          *ngFor="let l of letters$ | async"
+          routerLink="/letter"
+          [queryParams]="{ letter: l.name }"
           routerLinkActive="active-list-item"
           class="list-group-item font-weight-bold"
         >
-          {{ l }}
+          {{ l.name }}
         </a>
       </ul>
     </div>

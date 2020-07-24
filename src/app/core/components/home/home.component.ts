@@ -1,5 +1,12 @@
-import { MediaObserver } from '@angular/flex-layout';
 import { Component, OnInit } from '@angular/core';
+import { MediaObserver } from '@angular/flex-layout';
+
+import { LetterService } from './../../../shared/services/letter.service';
+
+interface Letter {
+  letterId: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -7,43 +14,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  letters = [
-    'А',
-    'Б',
-    'В',
-    'Г',
-    'Д',
-    'Е',
-    'Ё',
-    'Ж',
-    'З',
-    'И',
-    'Й',
-    'К',
-    'Л',
-    'М',
-    'Н',
-    'О',
-    'П',
-    'Р',
-    'С',
-    'Т',
-    'У',
-    'Ф',
-    'Х',
-    'Ц',
-    'Ч',
-    'Ш',
-    'Щ',
-    'Ъ',
-    'Ы',
-    'Ь',
-    'Э',
-    'Ю',
-    'Я',
-  ];
+  letters$: Promise<Letter> = null;
 
-  constructor(public media: MediaObserver) {}
+  constructor(
+    public media: MediaObserver,
+    private letterService: LetterService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.letters$ = this.letterService.getLettersNames();
+  }
 }

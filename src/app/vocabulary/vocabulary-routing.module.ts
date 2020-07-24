@@ -1,10 +1,8 @@
-import { LetterBComponent } from './components/letter-b/letter-b.component';
 import { LetterComponent } from './components/letter/letter.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [{ path: 'letter', component: LetterComponent },
-{path: 'letter-b', component: LetterBComponent }];
+const routes: Routes = [{ path: 'letter', component: LetterComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

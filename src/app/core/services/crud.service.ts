@@ -6,8 +6,7 @@ import {
 
 export abstract class CrudService<T = any> {
   protected endpoint;
-  //url = 'https://farm-shop.herokuapp.com/api';
-  url = 'https://localhost:3000/api';
+  url = 'https://vocabulary-online.herokuapp.com/api';
 
   protected constructor(protected http: HttpClient) {}
 
