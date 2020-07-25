@@ -1,17 +1,4 @@
 <mat-toolbar color="primary">
-  <button
-    *ngIf="authService.isLogged()"
-    mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
-  >
-    <mat-icon
-      *ngIf="media.isActive('sm') || media.isActive('xs')"
-      (click)="sidenav.toggle()"
-      >menu</mat-icon
-    >
-  </button>
-
   <a
     mat-mini-fab
     [ngClass.gt-sm]="'ml-4'"
@@ -19,11 +6,32 @@
     routerLink="/"
     color="primary"
   >
-    <mat-icon>storefront</mat-icon>
+    <mat-icon>language</mat-icon>
   </a>
   <span *ngIf="media.isActive('md') || media.isActive('lg')" class="ml-2"
-    >Farm Shop</span
+    >Vocabulary</span
   >
+
+  <!--<mat-form-field class="example-full-width mx-3">
+    <input type="text" matInput placeholder="Search" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>-->
+  <!-- <mat-form-field class="example-full-width mx-3">
+    <input type="text" matInput placeholder="Search" />
+   <a matSuffix><mat-icon >search</mat-icon></a> 
+  </mat-form-field> -->
+
+  <mat-form-field class="example-full-width mx-3">
+    <input matInput type="text" (keydown.enter)="search(input)" placeholder="Search" #input >
+    <button mat-button  
+            matSuffix
+            mat-icon-button 
+            (click)="search(input)"
+            
+            >
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
 
   <span class="example-spacer"></span>
 
@@ -36,11 +44,8 @@
   </a>
 
   <ng-template #logged>
-    <p class="mt-3">{{ authService.currentUser.firstName }}</p>
+    <p *ngIf="!media.isActive('xs')" class="mt-3">{{ authService.currentUser.firstName }}</p>
 
-    <!-- <a mat-button [matMenuTriggerFor]="userProfileMenu"
-      ><div class="user-avatar ml-2"></div
-    ></a> -->
     <a
       mat-mini-fab
       [matMenuTriggerFor]="userProfileMenu"
@@ -50,14 +55,48 @@
     >
   </ng-template>
 
-  <a mat-button routerLink="/shopping-cart"
-    ><mat-icon matBadgeColor="accent" [matBadge]="cartItemCount"
-      >add_shopping_cart</mat-icon
-    ></a
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
   >
+    <mat-icon
+      *ngIf="media.isActive('sm') || media.isActive('xs')"
+      (click)="sidenav.toggle()"
+      >menu</mat-icon
+    >
+  </button>
 </mat-toolbar>
 
 <mat-menu #userProfileMenu="matMenu">
+  <ng-container
+    *ngIf="
+      authService.isLogged() && authService.currentUser.roles.includes('ADMIN')
+    "
+  >
+    <a
+      mat-menu-item
+      routerLink="/admin/letters"
+      routerLinkActive="active-list-item"
+    >
+      <mat-icon>list</mat-icon>
+      <span>Manage Letters</span></a
+    >
+    <a
+      mat-menu-item
+      routerLink="/admin/comments"
+      routerLinkActive="active-list-item"
+    >
+      <mat-icon>shopping_basket</mat-icon><span>Manage Comments</span></a
+    >
+    <a
+      mat-menu-item
+      routerLink="/admin/users"
+      routerLinkActive="active-list-item"
+    >
+      <mat-icon>people</mat-icon><span>Manage Users</span></a
+    >
+  </ng-container>
   <a
     *ngIf="authService.isLogged()"
     [routerLink]="['/edit-user/', authService.currentUser._id]"
@@ -94,73 +133,19 @@
 </mat-menu>
 
 <mat-sidenav-container>
-  <mat-sidenav #sidenav>
-    <mat-nav-list *ngIf="authService.isLogged()">
+  <mat-sidenav #sidenav position="end">
+    <mat-nav-list>
       <a
-        *ngIf="!authService.currentUser.roles.includes('ADMIN')"
         mat-list-item
-        routerLink="/my/orders"
-        routerLinkActive="active-list-item"
+        *ngFor="let l of letters"
+        routerLink="/letter"
+        [queryParams]="{ letter: l.name }"
         (click)="sidenav.toggle()"
-        ><h2 matLine>M</h2>
-      </a>
-      <ng-container
-        *ngIf="authService.currentUser.roles.includes('FARM_OWNER')"
+        routerLinkActive="active-list-item"
+        class="font-weight-bold"
       >
-        <a
-          *ngFor="let l of letters"
-          class="font-weight-bold"
-          mat-list-item
-          routerLink="/letter-a"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>{{ l }}</h2>
-        </a>
-        <!-- <a
-      class="font-weight-bold"
-          mat-list-item
-          routerLink="/letter-b"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>Letter-B</h2>
-          <mat-icon matListIcon>shopping_basket</mat-icon></a
-        > -->
-        <!--  <a
-          mat-list-item
-          routerLink="/farm/update-farm"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>Farm Details</h2>
-          <mat-icon matListIcon>add_business</mat-icon></a
-        >-->
-      </ng-container>
-
-      <ng-container *ngIf="authService.currentUser.roles.includes('ADMIN')">
-        <a
-          mat-list-item
-          routerLink="/admin/orders"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>Manage Orders</h2>
-          <mat-icon matListIcon>list</mat-icon></a
-        >
-        <a
-          mat-list-item
-          routerLink="/admin/products"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>Manage Products</h2>
-          <mat-icon matListIcon>shopping_basket</mat-icon></a
-        >
-        <a
-          mat-list-item
-          routerLink="/admin/users"
-          routerLinkActive="active-list-item"
-          (click)="sidenav.toggle()"
-          ><h2 matLine>Manage Users</h2>
-          <mat-icon matListIcon>people</mat-icon></a
-        >
-      </ng-container>
+        {{ l.name }}
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
