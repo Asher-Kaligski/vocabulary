@@ -4,8 +4,8 @@ export interface Comment {
   letterName: string;
   isApproved: boolean;
   content: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createAt: Date;
+  updateAt: Date;
   user: {
     _id: string;
     firstName: string;

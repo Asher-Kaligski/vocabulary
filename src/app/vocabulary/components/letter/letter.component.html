@@ -1,17 +1,88 @@
-<!-- <p>letter A works!</p> -->
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" class="my-3">
+    <h1>Letter {{ letterName }}</h1>
 
-<div *ngIf="letter$ | async as letter">
-  <p>Letter Name {{ letter.name }}</p>
-  <p>Letter Title {{ letter.title }}</p>
-  <div *ngFor="let word of letter.words">
-    <p>Word Name {{ word.name }}</p>
-    <p>Word Description {{ word.description }}</p>
+    <ng-container *ngIf="isLoading">
+      <mat-spinner mode="indeterminate" diameter="70"></mat-spinner>
+      <h2>Loading data</h2>
+    </ng-container>
   </div>
-  <div *ngFor="let comment of letter.comments">
-    <p>Comment Content {{ comment.content }}</p>
-    <p>Comment CreatedAt {{ comment.createdAt | date: "full" }}</p>
-    <p>Comment isApproved {{ comment.isApproved }}</p>
-    <p>user.firstName {{ comment.user.firstName }}</p>
-    <p>user.lastName {{ comment.user.lastName }}</p>
+
+  <div *ngIf="letter">
+    <div
+      *ngIf="
+        authService.isLogged() &&
+          authService?.currentUser.roles.includes('ADMIN');
+        else noAdmin
+      "
+      fxLayout="column"
+      fxLayoutAlign="space-evenly center"
+      fxLayoutGap="3%"
+    >
+      <!-- <ul class="list-group">
+        <li class="list-group-item">{{ letter.title }}</li>
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+          <button color="primary" mat-raised-button>Edit</button>
+        </div>
+      </ul> -->
+
+      <ul class="list-group" *ngFor="let word of letter.words">
+        <li class="list-group-item">
+          <span class="word">{{ word.name }}</span>
+          {{ word.description }}
+        </li>
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10%" class="mt-2">
+          <button color="primary" (click)="editWord(word)" mat-mini-fab><mat-icon>edit</mat-icon></button>
+          
+          <button color="primary" (click)="deleteWord(word._id)" mat-mini-fab><mat-icon>delete</mat-icon></button>
+        </div>
+      </ul>
+
+      <button color="primary" mat-raised-button>Add New</button>
+
+      <h2>Comments</h2>
+
+      <ul class="list-group" *ngFor="let comment of letter.comments">
+        <li class="list-group-item">
+          {{ comment.content }}
+          <span class="comment-user"
+            >{{ comment.user.firstName }} {{ comment.user.lastName }} CreatedAt
+            {{ comment.createAt | date: "short" }}</span
+          >
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #noAdmin>
+      <div
+        fxLayout="column"
+        fxLayoutAlign="space-evenly center"
+        fxLayoutGap="3%"
+      >
+        <!-- <ul class="list-group">
+          <li class="list-group-item">{{ letter.title }}</li>
+        </ul> -->
+
+        <ul class="list-group" *ngFor="let word of letter.words">
+          <li class="list-group-item">
+            <span class="word">{{ word.name }}</span>
+            {{ word.description }}
+          </li>
+        </ul>
+
+        <h2>Comments</h2>
+
+        <ul class="list-group" *ngFor="let comment of letter.comments">
+          <li class="list-group-item">
+            {{ comment.content }}
+            <span class="comment-user"
+              >{{ comment.user.firstName }}
+              {{ comment.user.lastName }} CreatedAt
+              {{ comment.createAt | date: "short" }}</span
+            >
+          </li>
+        </ul>
+      </div>
+    </ng-template>
   </div>
 </div>

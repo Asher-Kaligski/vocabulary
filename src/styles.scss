@@ -34,7 +34,7 @@ $theme: map_merge(
 
 @include angular-material-theme($theme);
 
-$primary-button: mat-palette($mat-cyan, 600);
+$primary-button: mat-palette($mat-amber, A100);
 
 $accent-button: mat-palette($mat-pink, A200, A100, A400);
 $theme-button: mat-light-theme($primary-button, $accent-button);

@@ -8,15 +8,16 @@
       class="col-1 menu p-0"
     >
       <ul class="list-group">
-        <a
+        <button mat-stroked-button
+        
           *ngFor="let l of letters$ | async"
           routerLink="/letter"
           [queryParams]="{ letter: l.name }"
           routerLinkActive="active-list-item"
-          class="list-group-item font-weight-bold"
+          class=" font-weight-bold"
         >
           {{ l.name }}
-        </a>
+        </button>
       </ul>
     </div>
   </div>

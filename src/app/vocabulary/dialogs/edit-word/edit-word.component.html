@@ -1,0 +1,68 @@
+<div class="container" fxLayout="column" fxLayoutAlign="space-between center">
+
+<h2 mat-dialog-title>Edit word</h2>
+
+<mat-dialog-content >
+  <form #f="ngForm" fxLayout="column" fxLayoutAlign="space-between center">
+    <mat-form-field class="full-width-input">
+      <mat-label>Word Name</mat-label>
+      <input
+        matInput
+        required
+        minlength="2"
+        maxlength="30"
+        [(ngModel)]="word.name"
+        name="name"
+        #name="ngModel"
+        type="name"
+      />
+      <ng-container *ngIf="name.touched && !name.valid">
+        <mat-error *ngIf="name.errors.required">
+          Word Name is required
+        </mat-error>
+        <mat-error *ngIf="name.errors.minlength">
+          Word Name should be minimum
+          {{ name.errors.minlength.requiredLength }} characters
+        </mat-error>
+        <mat-error *ngIf="name.errors.maxlength">
+          Word Name should be maximum
+          {{ name.errors.maxlength.requiredLength }} characters
+        </mat-error>
+      </ng-container>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput 
+      matInput
+        required
+        minlength="2"
+        maxlength="30"
+        [(ngModel)]="word.description"
+        name="description"
+        #description="ngModel"
+        type="description"
+      ></textarea>
+      <ng-container *ngIf="description.touched && !description.valid">
+        <mat-error *ngIf="description.errors.required">
+          Word description is required
+        </mat-error>
+        <mat-error *ngIf="description.errors.minlength">
+          Word description should be minimum
+          {{ description.errors.minlength.requiredLength }} characters
+        </mat-error>
+        <mat-error *ngIf="name.errors.maxlength">
+          Word description should be maximum
+          {{ description.errors.maxlength.requiredLength }} characters
+        </mat-error>
+      </ng-container>
+    </mat-form-field>
+</form>
+ 
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button class="mx-3" color="accent" (click)="close()">Close</button>
+    <button mat-raised-button class="mx-3" color="primary" (click)="save(f)">Save</button>
+</mat-dialog-actions>
+</div>

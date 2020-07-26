@@ -7,6 +7,6 @@ export interface Letter {
   title: string;
   words: Word[] | null;
   comments: Comment[] | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createAt: Date;
+  updateAt: Date;
 }
