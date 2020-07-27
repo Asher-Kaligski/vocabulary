@@ -1,26 +1,49 @@
-import { Word } from './../../../shared/models/word';
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+
+import { LetterService } from './../../../shared/services/letter.service';
 
 @Component({
   selector: 'app-edit-word',
   templateUrl: './edit-word.component.html',
   styleUrls: ['./edit-word.component.scss'],
 })
-export class EditWordComponent implements OnInit {
-  word: Word;
+export class EditWordComponent {
+  word: any;
+  letterId: number;
   constructor(
     private dialogRef: MatDialogRef<EditWordComponent>,
-    @Inject(MAT_DIALOG_DATA) data: Word
+    @Inject(MAT_DIALOG_DATA) public data,
+    private letterService: LetterService,
+    private toastr: ToastrService
   ) {
-    this.word = data;
+    this.word = data.word;
+    if (!this.word) {
+      this.word = { name: '', description: '' };
+    }
+
+    this.letterId = data.letterId;
   }
 
-  ngOnInit(): void {}
-  createWord(f) {}
+  async save(form) {
+    if (!form.valid) return;
 
-  save(form) {
-    this.dialogRef.close(form.value);
+    try {
+      if (this.word?._id) form.value.wordId = this.word._id;
+
+      const result = await this.letterService.createOrUpdateWord(
+        this.letterId,
+        form.value
+      );
+
+      this.toastr.success('The word has been successfully updated');
+
+      if (this.word?._id) this.dialogRef.close('success');
+      else this.dialogRef.close(result);
+    } catch (err) {
+      this.toastr.error(err.error);
+    }
   }
 
   close() {

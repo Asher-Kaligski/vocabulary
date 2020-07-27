@@ -1,19 +1,23 @@
-.list-group-item{
-    background-color: #FFECB3;
-    
+.list-group-item {
+  background-color: #ffecb3;
+  //   max-width: 75%;
 }
 
-.word{
-    font-weight: 700;
+.list-group {
+  max-width: 90%;
 }
 
-.comment-user{
-    display: block;
-    font-size: small;
+.word {
+  font-weight: 700;
+}
+
+.comment-user {
+  display: block;
+  font-size: small;
 }
 
 .myClass {
-    max-height: 95%;
-    width: 620px;
-    overflow-y: auto;
+  max-height: 95%;
+  width: 620px;
+  overflow-y: auto;
 }

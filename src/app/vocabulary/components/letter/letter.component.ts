@@ -1,3 +1,4 @@
+import { Word } from './../../../shared/models/word';
 import { EditWordComponent } from './../../dialogs/edit-word/edit-word.component';
 import { AuthService } from './../../../shared/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
@@ -48,27 +49,43 @@ export class LetterComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  deleteWord(wordId) {
-    console.log('delete wordId', wordId);
+  async deleteContent(wordId) {
+    try {
+      const result = await this.letterService.deleteWord(
+        this.letter.letterId,
+        wordId
+      );
+
+      const index = this.letter.words.findIndex((w) => w._id === wordId);
+      if (index !== -1) this.letter.words.splice(index, 1);
+
+      this.toastr.success('The word has been deleted successfully');
+    } catch (err) {
+      this.toastr.error(err.error);
+    }
   }
 
-  editWord(word) {
-    console.log('word before update', word);
-    const dialogConfig = new MatDialogConfig();
+  editWord(word: Word | null) {
+    let wordCopy = JSON.parse(JSON.stringify(word));
 
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    //dialogConfig.height = '70%';
-    dialogConfig.width = '620px';
-    dialogConfig.height = '300px';
-    dialogConfig.data = word;
+    const dialogRef = this.dialog.open(EditWordComponent, {
+      data: { word, letterId: this.letter.letterId },
+      height: '70vh',
+      width: '800px',
+      disableClose: true,
+      autoFocus: true,
+    });
 
-    this.dialog.open(EditWordComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result !== 'success') this.letter.words.push(result);
 
-    const dialogRef = this.dialog.open(EditWordComponent, dialogConfig);
-
-    dialogRef
-      .afterClosed()
-      .subscribe((data) => console.log('Dialog output:', data));
+      if (!result && wordCopy) {
+        const index = this.letter.words.findIndex(
+          (w) => w._id === wordCopy._id
+        );
+        this.letter.words[index].name = wordCopy.name;
+        this.letter.words[index].description = wordCopy.description;
+      }
+    });
   }
 }

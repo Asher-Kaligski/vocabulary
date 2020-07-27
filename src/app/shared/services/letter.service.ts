@@ -12,10 +12,18 @@ export class LetterService extends CrudService {
   }
 
   async getLettersNames() {
-    return this.getById('/names');
+    return this.getById('names');
   }
 
   getByName(letterName) {
-    return this.getById('/?letter=' + letterName);
+    return this.getById('?letter=' + letterName);
+  }
+
+  async createOrUpdateWord(letterId: number, form: any) {
+    return this.patchById(form, letterId);
+  }
+
+  async deleteWord(letterId: number, wordId: any) {
+    return this.deleteById(letterId + '/wordId/' + wordId);
   }
 }

@@ -34,11 +34,11 @@
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10%" class="mt-2">
           <button color="primary" (click)="editWord(word)" mat-mini-fab><mat-icon>edit</mat-icon></button>
           
-          <button color="primary" (click)="deleteWord(word._id)" mat-mini-fab><mat-icon>delete</mat-icon></button>
+          <button color="primary" (click)="deleteContent(word._id)" mat-mini-fab><mat-icon>delete</mat-icon></button>
         </div>
       </ul>
 
-      <button color="primary" mat-raised-button>Add New</button>
+      <button color="primary" mat-raised-button (click)="editWord(null)">Add New</button>
 
       <h2>Comments</h2>
 
