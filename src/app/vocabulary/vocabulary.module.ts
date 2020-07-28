@@ -1,16 +1,17 @@
-import { FormsModule } from '@angular/forms';
-import { SharedModule } from './../shared/shared.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MaterialModule } from './../shared/material.module';
-import { VocabularyRoutingModule } from './vocabulary-routing.module';
-import { NgModule } from '@angular/core';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+
+import { MaterialModule } from './../shared/material.module';
+import { SharedModule } from './../shared/shared.module';
 import { LetterComponent } from './components/letter/letter.component';
-import { NewWordComponent } from './dialogs/new-word/new-word.component';
 import { EditWordComponent } from './dialogs/edit-word/edit-word.component';
+import { VocabularyRoutingModule } from './vocabulary-routing.module';
 
 @NgModule({
-  declarations: [LetterComponent, NewWordComponent, EditWordComponent],
+  declarations: [LetterComponent, EditWordComponent],
   imports: [
     CommonModule,
     VocabularyRoutingModule,
@@ -18,8 +19,9 @@ import { EditWordComponent } from './dialogs/edit-word/edit-word.component';
     FormsModule,
     SharedModule,
     FlexLayoutModule,
+    TextFieldModule,
   ],
   exports: [LetterComponent],
-  entryComponents: [NewWordComponent, EditWordComponent]
+  entryComponents: [ EditWordComponent],
 })
 export class VocabularyModule {}

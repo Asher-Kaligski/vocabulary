@@ -19,6 +19,7 @@ export class LetterComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   letterName: string;
   isLoading = false;
+  isLoadingOnDelete = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,6 +51,7 @@ export class LetterComponent implements OnInit, OnDestroy {
   }
 
   async deleteContent(wordId) {
+    this.isLoadingOnDelete = true;
     try {
       const result = await this.letterService.deleteWord(
         this.letter.letterId,
@@ -62,6 +64,8 @@ export class LetterComponent implements OnInit, OnDestroy {
       this.toastr.success('The word has been deleted successfully');
     } catch (err) {
       this.toastr.error(err.error);
+    } finally{
+      this.isLoadingOnDelete = false;
     }
   }
 
@@ -77,7 +81,7 @@ export class LetterComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result && result !== 'success') this.letter.words.push(result);
+      if (result && result !== 'updated') this.letter.words.push(result);
 
       if (!result && wordCopy) {
         const index = this.letter.words.findIndex(

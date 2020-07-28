@@ -31,26 +31,44 @@
           <span class="word">{{ word.name }}</span>
           {{ word.description }}
         </li>
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10%" class="mt-2">
-          <button color="primary" (click)="editWord(word)" mat-mini-fab><mat-icon>edit</mat-icon></button>
-          
-          <button color="primary" (click)="deleteContent(word._id)" mat-mini-fab><mat-icon>delete</mat-icon></button>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          fxLayoutGap="10%"
+          class="mt-2"
+        >
+          <button color="primary" (click)="editWord(word)" mat-mini-fab>
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button
+            color="primary"
+            (click)="deleteContent(word._id)"
+            mat-mini-fab
+          >
+            <mat-icon *ngIf="!isLoadingOnDelete">delete </mat-icon>
+            <mat-icon *ngIf="isLoadingOnDelete"
+              ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
+            ></mat-icon>
+          </button>
         </div>
       </ul>
 
-      <button color="primary" mat-raised-button (click)="editWord(null)">Add New</button>
+      <button color="primary" mat-raised-button (click)="editWord(null)">
+        Add New
+      </button>
 
       <h2>Comments</h2>
 
-      <ul class="list-group" *ngFor="let comment of letter.comments">
+      <!-- <ul class="list-group" *ngFor="let comment of letter.comments">
         <li class="list-group-item">
           {{ comment.content }}
-          <span class="comment-user"
+          <span class="user-comment"
             >{{ comment.user.firstName }} {{ comment.user.lastName }} CreatedAt
             {{ comment.createAt | date: "short" }}</span
           >
         </li>
-      </ul>
+      </ul>-->
     </div>
 
     <ng-template #noAdmin>
@@ -62,26 +80,34 @@
         <!-- <ul class="list-group">
           <li class="list-group-item">{{ letter.title }}</li>
         </ul> -->
+        <div *ngIf="letter.words?.length && !isLoading; else noWords">
+          <ul class="list-group" *ngFor="let word of letter.words">
+            <li class="list-group-item">
+              <span class="word">{{ word.name }}</span>
+              {{ word.description }}
+            </li>
+          </ul>
+        </div>
 
-        <ul class="list-group" *ngFor="let word of letter.words">
-          <li class="list-group-item">
-            <span class="word">{{ word.name }}</span>
-            {{ word.description }}
-          </li>
-        </ul>
+        <ng-template #noWords>
+          <h2>
+            There are on any content yet. If you have any suggestions please
+            leave your comment below.
+          </h2>
+        </ng-template>
 
         <h2>Comments</h2>
 
-        <ul class="list-group" *ngFor="let comment of letter.comments">
+        <!--<ul class="list-group" *ngFor="let comment of letter.comments">
           <li class="list-group-item">
             {{ comment.content }}
-            <span class="comment-user"
+            <span class="user-comment"
               >{{ comment.user.firstName }}
               {{ comment.user.lastName }} CreatedAt
               {{ comment.createAt | date: "short" }}</span
             >
           </li>
-        </ul>
+        </ul>-->
       </div>
     </ng-template>
   </div>
