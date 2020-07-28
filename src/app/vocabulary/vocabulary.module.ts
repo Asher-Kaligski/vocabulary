@@ -22,6 +22,6 @@ import { VocabularyRoutingModule } from './vocabulary-routing.module';
     TextFieldModule,
   ],
   exports: [LetterComponent],
-  entryComponents: [ EditWordComponent],
+  entryComponents: [EditWordComponent],
 })
 export class VocabularyModule {}

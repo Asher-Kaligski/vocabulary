@@ -1,3 +1,4 @@
+import { CommentService } from './../../../shared/services/comment.service';
 import { Word } from './../../../shared/models/word';
 import { EditWordComponent } from './../../dialogs/edit-word/edit-word.component';
 import { AuthService } from './../../../shared/services/auth.service';
@@ -24,6 +25,7 @@ export class LetterComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private letterService: LetterService,
+    private commentService: CommentService,
     private toastr: ToastrService,
     public authService: AuthService,
     private dialog: MatDialog
@@ -50,6 +52,28 @@ export class LetterComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  async saveComment(f) {
+    if (!f.valid) return;
+
+    try {
+      f.value.letterName = this.letter.name;
+      f.value.userId = this.authService.currentUser._id;
+
+      if (this.authService.currentUser.roles.includes('ADMIN'))
+        f.value.isApproved = true;
+
+      console.log(f.value);
+     // this.commentService.create(f.value);
+    } catch (error) {}
+
+    /*
+    letterName: Joi.string().required(),
+    content: Joi.string().required(),
+    userId: Joi.string().required(),
+    isApproved: Joi.boolean(),
+    */
+  }
+
   async deleteContent(wordId) {
     this.isLoadingOnDelete = true;
     try {
@@ -64,13 +88,13 @@ export class LetterComponent implements OnInit, OnDestroy {
       this.toastr.success('The word has been deleted successfully');
     } catch (err) {
       this.toastr.error(err.error);
-    } finally{
+    } finally {
       this.isLoadingOnDelete = false;
     }
   }
 
   editWord(word: Word | null) {
-    let wordCopy = JSON.parse(JSON.stringify(word));
+    const wordCopy = JSON.parse(JSON.stringify(word));
 
     const dialogRef = this.dialog.open(EditWordComponent, {
       data: { word, letterId: this.letter.letterId },

@@ -55,7 +55,7 @@
             Word description should be minimum
             {{ description.errors.minlength.requiredLength }} characters
           </mat-error>
-          <mat-error *ngIf="name.errors.maxlength">
+          <mat-error *ngIf="description.errors.maxlength">
             Word description should be maximum
             {{ description.errors.maxlength.requiredLength }} characters
           </mat-error>
