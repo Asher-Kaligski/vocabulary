@@ -31,7 +31,7 @@ export class EditWordComponent {
   async save(form) {
     if (!form.valid) return;
 
-    const arr: string[] = form.value.description.split(/\n/g);
+    /*const arr: string[] = form.value.description.split(/\n/g);
 
     for (const word of arr) {
       if (word.length > 28) {
@@ -40,7 +40,7 @@ export class EditWordComponent {
         );
         return;
       }
-    }
+    }*/
 
     try {
       this.isLoading = true;
