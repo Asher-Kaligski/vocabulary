@@ -5,8 +5,8 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class CommentService extends CrudService {
-  endpoint = 'comments';
+export class CommentReplyService extends CrudService {
+  endpoint = 'comment-replies';
   constructor(http: HttpClient) {
     super(http);
   }

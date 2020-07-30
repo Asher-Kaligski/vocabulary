@@ -1,3 +1,4 @@
+import { Comment } from './../../../shared/models/comment';
 import { CommentService } from './../../../shared/services/comment.service';
 import { Word } from './../../../shared/models/word';
 import { EditWordComponent } from './../../dialogs/edit-word/edit-word.component';
@@ -17,6 +18,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 })
 export class LetterComponent implements OnInit, OnDestroy {
   letter: Letter;
+  comments: any;
   subscription: Subscription;
   letterName: string;
   isLoading = false;
@@ -40,6 +42,7 @@ export class LetterComponent implements OnInit, OnDestroy {
         .then((result) => {
           this.isLoading = false;
           this.letter = result;
+          this.comments = this.letter.comments.filter((c) => c.isApproved);
         })
         .catch((err) => {
           this.isLoading = false;
@@ -52,8 +55,24 @@ export class LetterComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  async editComment(comment: Comment){
+    
+  }
+  async approveComment(comment: Comment){
+
+  }
+  async replyComment(comment: Comment){
+
+  }
+  async deleteComment(commentId){
+
+  }
+
   async saveComment(f) {
     if (!f.valid) return;
+
+    if (!this.authService.isLogged())
+      return this.toastr.error('Could not post your comment, please login.');
 
     try {
       f.value.letterName = this.letter.name;
@@ -62,16 +81,18 @@ export class LetterComponent implements OnInit, OnDestroy {
       if (this.authService.currentUser.roles.includes('ADMIN'))
         f.value.isApproved = true;
 
-      console.log(f.value);
-     // this.commentService.create(f.value);
-    } catch (error) {}
+      const comment: Comment = await this.commentService.create(f.value);
 
-    /*
-    letterName: Joi.string().required(),
-    content: Joi.string().required(),
-    userId: Joi.string().required(),
-    isApproved: Joi.boolean(),
-    */
+      f.reset();
+
+      if (comment.isApproved) this.letter.comments.push(comment);
+
+      this.toastr.success(
+        'The comment has been successfully saved, after approving with the owner of the website it will be posted'
+      );
+    } catch (err) {
+      this.toastr.error(err.error);
+    }
   }
 
   async deleteContent(wordId) {

@@ -8,7 +8,13 @@
     </ng-container>
   </div>
 
-  <div *ngIf="letter">
+  <div
+    *ngIf="letter"
+    fxLayout="column"
+    fxLayoutAlign="space-evenly center"
+    fxLayoutGap="3%"
+    class="mb-3"
+  >
     <div
       *ngIf="
         authService.isLogged() &&
@@ -17,7 +23,7 @@
       "
       fxLayout="column"
       fxLayoutAlign="space-evenly center"
-      fxLayoutGap="3%"
+      fxLayoutGap="1%"
     >
       <!-- <ul class="list-group">
         <li class="list-group-item">{{ letter.title }}</li>
@@ -27,9 +33,14 @@
       </ul> -->
 
       <ul class="list-group" *ngFor="let word of letter.words">
-        <li class="list-group-item my-1">
+        <!-- <li class="list-group-item my-1">
           <span class="word">{{ word.name }}</span>
           {{ word.description }}
+        </li> -->
+        <li class="list-group-item my-1"
+        [innerHTML]="word.description"
+        >
+          
         </li>
         <div
           fxLayout="row"
@@ -68,6 +79,38 @@
             {{ comment.createAt | date: "short" }}</span
           >
         </li>
+        <div
+          fxLayout="row"
+          fxLayoutAlign="center center"
+          fxLayoutGap="10%"
+          class="mt-2"
+        >
+          <button color="primary" (click)="editComment(comment)" mat-mini-fab>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            color="primary"
+            (click)="approveComment(comment)"
+            mat-mini-fab
+          >
+            <mat-icon *ngIf="!comment.isApproved">thumb_up_alt</mat-icon>
+            <mat-icon *ngIf="comment.isApproved">thumb_down_alt</mat-icon>
+          </button>
+          <button color="primary" (click)="replyComment(comment)" mat-mini-fab>
+            <mat-icon>reply</mat-icon>
+          </button>
+
+          <button
+            color="primary"
+            (click)="deleteComment(comment._id)"
+            mat-mini-fab
+          >
+            <mat-icon *ngIf="!isLoadingOnDelete">delete </mat-icon>
+            <mat-icon *ngIf="isLoadingOnDelete"
+              ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
+            ></mat-icon>
+          </button>
+        </div>
       </ul>
     </div>
 
@@ -75,19 +118,19 @@
       <div
         fxLayout="column"
         fxLayoutAlign="space-evenly center"
-        fxLayoutGap="3%"
+        fxLayoutGap="1%"
       >
         <!-- <ul class="list-group">
           <li class="list-group-item">{{ letter.title }}</li>
         </ul> -->
-        <div *ngIf="letter.words?.length && !isLoading; else noWords">
-          <ul class="list-group" *ngFor="let word of letter.words">
-            <li class="list-group-item my-1">
-              <span class="word">{{ word.name }}</span>
-              {{ word.description }}
-            </li>
-          </ul>
-        </div>
+        <!-- <div *ngIf="letter.words?.length && !isLoading; else noWords"> -->
+        <ul class="list-group" *ngFor="let word of letter.words">
+          <li class="list-group-item my-1">
+            <span class="word">{{ word.name }}</span>
+            {{ word.description }}
+          </li>
+        </ul>
+        <!-- </div> -->
 
         <ng-template #noWords>
           <h3>
@@ -98,72 +141,82 @@
 
         <h2>Comments</h2>
 
-        <ul class="list-group" *ngFor="let comment of letter.comments">
-          <li class="list-group-item">
+        <ul class="list-group" *ngFor="let comment of comments">
+          <li
+            class="list-group-item"
+            fxLayout="column"
+            fxLayoutAlign="center center"
+          >
             {{ comment.content }}
             <span class="user-comment"
               >{{ comment.user.firstName }}
               {{ comment.user.lastName }} CreatedAt
               {{ comment.createAt | date: "short" }}</span
             >
+            <button
+              color="primary"
+              (click)="replyComment(comment)"
+              mat-mini-fab
+            >
+              <mat-icon>reply</mat-icon>
+            </button>
           </li>
         </ul>
-
-        <mat-card class="comment-card">
-          <mat-dialog-content>
-            <form
-              #f="ngForm"
-              fxLayout="column"
-              fxLayoutAlign="space-around stretch"
-            >
-              <mat-form-field class="comment-area">
-                <mat-label>Leave a comment</mat-label>
-                <textarea
-                  required
-                  matInput
-                  cdkTextareaAutosize
-                  cdkAutosizeMinRows="1"
-                  cdkAutosizeMaxRows="10"
-                  minlength="2"
-                  maxlength="10000"
-                  ngModel
-                  name="content"
-                  #content="ngModel"
-                ></textarea>
-                <ng-container *ngIf="content.touched && !content.valid">
-                  <mat-error *ngIf="content.errors.required">
-                    Comment is required
-                  </mat-error>
-                  <mat-error *ngIf="content.errors.minlength">
-                    Comment should be minimum
-                    {{ content.errors.minlength.requiredLength }} characters
-                  </mat-error>
-                  <mat-error *ngIf="content.errors.maxlength">
-                    Comment should be maximum
-                    {{ content.errors.maxlength.requiredLength }} characters
-                  </mat-error>
-                </ng-container>
-              </mat-form-field>
-            </form>
-          </mat-dialog-content>
-
-          <mat-dialog-actions fxLayout="column" fxLayoutAlign="center none">
-            <button
-              class="comment-button"
-              [disabled]="!f.valid"
-              mat-raised-button
-              class="mx-3"
-              color="primary"
-              (click)="saveComment(f)"
-            >
-              Post
-              <mat-icon *ngIf="isLoading"
-                ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
-              ></mat-icon>
-            </button>
-          </mat-dialog-actions>
-        </mat-card>
       </div>
     </ng-template>
+    <mat-card class="comment-card">
+      <mat-dialog-content>
+        <form
+          #f="ngForm"
+          fxLayout="column"
+          fxLayoutAlign="space-around stretch"
+        >
+          <mat-form-field class="comment-area">
+            <mat-label>Leave a comment</mat-label>
+            <textarea
+              required
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="10"
+              minlength="2"
+              maxlength="10000"
+              ngModel
+              name="content"
+              #content="ngModel"
+            ></textarea>
+            <ng-container *ngIf="content.touched && !content.valid">
+              <mat-error *ngIf="content.errors.required">
+                Comment is required
+              </mat-error>
+              <mat-error *ngIf="content.errors.minlength">
+                Comment should be minimum
+                {{ content.errors.minlength.requiredLength }} characters
+              </mat-error>
+              <mat-error *ngIf="content.errors.maxlength">
+                Comment should be maximum
+                {{ content.errors.maxlength.requiredLength }} characters
+              </mat-error>
+            </ng-container>
+          </mat-form-field>
+        </form>
+      </mat-dialog-content>
+
+      <mat-dialog-actions fxLayout="column" fxLayoutAlign="center none">
+        <button
+          class="comment-button"
+          [disabled]="!f.valid"
+          mat-raised-button
+          class="mx-3"
+          color="primary"
+          (click)="saveComment(f)"
+        >
+          Post
+          <mat-icon *ngIf="isLoading"
+            ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
+          ></mat-icon>
+        </button>
+      </mat-dialog-actions>
+    </mat-card>
   </div>
 </div>

@@ -37,7 +37,7 @@ import { SharedModule } from './shared/shared.module';
     VocabularyModule,
     FlexLayoutModule,
     ToastrModule.forRoot({
-      timeOut: 2000,
+      timeOut: 3000,
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
