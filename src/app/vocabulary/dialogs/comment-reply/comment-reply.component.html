@@ -1,0 +1,56 @@
+<div class="container" fxLayout="column" fxLayoutAlign="space-between none">
+  <h2 mat-dialog-title class="text-center">Reply on the comment</h2>
+
+  <div class="comment mb-3 p-2" [innerHTML]="data.content"></div>
+
+  <mat-dialog-content>
+    <form #f="ngForm">
+      <mat-form-field>
+        <mat-label>Reply</mat-label>
+        <textarea
+          matInput
+          required
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="1"
+          cdkAutosizeMaxRows="10"
+          minlength="2"
+          maxlength="1000"
+          ngModel
+          name="content"
+          #content="ngModel"
+        ></textarea>
+        <ng-container *ngIf="content.touched && !content.valid">
+          <mat-error *ngIf="content.errors.required">
+            Reply is required
+          </mat-error>
+          <mat-error *ngIf="content.errors.minlength">
+            Reply should be minimum
+            {{ content.errors.minlength.requiredLength }} characters
+          </mat-error>
+          <mat-error *ngIf="content.errors.maxlength">
+            Reply should be maximum
+            {{ content.errors.maxlength.requiredLength }} characters
+          </mat-error>
+        </ng-container>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly center">
+    <button mat-raised-button class="mx-3" color="accent" (click)="close()">
+      Close
+    </button>
+    <button
+      [disabled]="!f.valid"
+      mat-raised-button
+      class="mx-3"
+      color="primary"
+      (click)="save(f)"
+    >
+      Save
+      <mat-icon *ngIf="isLoading"
+        ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
+      ></mat-icon>
+    </button>
+  </mat-dialog-actions>
+</div>

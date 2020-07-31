@@ -1,9 +1,9 @@
-<div class="container" fxLayout="column" fxLayoutAlign="space-between center">
-  <h2 mat-dialog-title>Edit word</h2>
+<div class="container" fxLayout="column" fxLayoutAlign="space-between none">
+  <h2 mat-dialog-title class="text-center">Edit word</h2>
 
   <mat-dialog-content>
     <form #f="ngForm">
-      <mat-form-field class="full-width-input">
+      <mat-form-field>
         <mat-label>Word Name</mat-label>
         <input
           matInput
@@ -36,7 +36,7 @@
         <mat-label>Description</mat-label>
         <textarea
           matInput
-          
+          required
           cdkTextareaAutosize
           cdkAutosizeMinRows="1"
           cdkAutosizeMaxRows="10"
@@ -64,11 +64,11 @@
     </form>
   </mat-dialog-content>
 
-  <mat-dialog-actions>
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly center">
     <button mat-raised-button class="mx-3" color="accent" (click)="close()">
       Close
     </button>
-    <button mat-raised-button class="mx-3" color="primary" (click)="save(f)" >
+    <button [disabled]="!f.valid" mat-raised-button class="mx-3" color="primary" (click)="save(f)" >
       Save
       <mat-icon *ngIf="isLoading"><mat-spinner mode="indeterminate" diameter="21">
       </mat-spinner></mat-icon>

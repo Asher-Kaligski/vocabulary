@@ -1,15 +1,17 @@
-import { Comment } from './../../../shared/models/comment';
-import { CommentService } from './../../../shared/services/comment.service';
-import { Word } from './../../../shared/models/word';
-import { EditWordComponent } from './../../dialogs/edit-word/edit-word.component';
-import { AuthService } from './../../../shared/services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { LetterService } from './../../../shared/services/letter.service';
+
+import { Comment } from './../../../shared/models/comment';
 import { Letter } from './../../../shared/models/letter';
-import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { Word } from './../../../shared/models/word';
+import { AuthService } from './../../../shared/services/auth.service';
+import { CommentService } from './../../../shared/services/comment.service';
+import { LetterService } from './../../../shared/services/letter.service';
+import { CommentReplyComponent } from './../../dialogs/comment-reply/comment-reply.component';
+import { EditWordComponent } from './../../dialogs/edit-word/edit-word.component';
 
 @Component({
   selector: 'app-letter',
@@ -22,7 +24,7 @@ export class LetterComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   letterName: string;
   isLoading = false;
-  isLoadingOnDelete = false;
+  isLoadingOnUpdate = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,17 +57,105 @@ export class LetterComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  async editComment(comment: Comment){
-    
-  }
-  async approveComment(comment: Comment){
+  async approveComment(comment: Comment) {
+    const obj = {
+      letterName: comment.letterName,
+      content: comment.content,
+      userId: this.authService.currentUser._id,
+      isApproved: !comment.isApproved,
+    };
+    try {
+      const result = await this.commentService.update(obj, comment._id);
 
-  }
-  async replyComment(comment: Comment){
+      const index = this.letter.comments.findIndex(
+        (c) => c._id === comment._id
+      );
+      if (index !== -1)
+        this.letter.comments[index].isApproved = result.isApproved;
 
+      this.toastr.success('The comment has been deleted successfully');
+    } catch (err) {
+      this.toastr.error(err.error);
+    }
   }
-  async deleteComment(commentId){
+  async replyOnComment(comment: Comment) {
+    const commentCopy = JSON.parse(JSON.stringify(comment));
 
+    const dialogRef = this.dialog.open(CommentReplyComponent, {
+      data: comment,
+      height: '70vh',
+      width: '800px',
+      disableClose: true,
+      autoFocus: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('result', result);
+      if (!result) return;
+
+      const index = this.letter.comments.findIndex(
+        (c) => c._id === comment._id
+      );
+      if (index !== -1) this.letter.comments[index] = result;
+    });
+  }
+
+  async approveCommentReply(commentId, reply) {
+    const obj = {
+      content: reply.content,
+      userId: this.authService.currentUser._id,
+      isApproved: !reply.isApproved,
+    };
+
+    try {
+      const result = await this.commentService.updateReply(
+        obj,
+        commentId,
+        reply._id
+      );
+      const index = this.letter.comments.findIndex((c) => c._id === commentId);
+      if (index !== -1) this.letter.comments[index] = result;
+
+      this.toastr.success(
+        'The reply of the comment has been updated successfully'
+      );
+    } catch (err) {
+      this.toastr.error(err.error);
+    }
+  }
+
+  async deleteCommentReply(commentId, replyId) {
+    this.isLoadingOnUpdate = true;
+    try {
+      const result = await this.commentService.deleteReply(commentId, replyId);
+
+      const index = this.letter.comments.findIndex((c) => c._id === commentId);
+      if (index !== -1) this.letter.comments[index] = result;
+
+      this.toastr.success(
+        'The reply of the comment has been deleted successfully'
+      );
+    } catch (err) {
+      this.toastr.error(err.error);
+    } finally {
+      this.isLoadingOnUpdate = false;
+    }
+  }
+
+  async deleteComment(commentId) {
+    this.isLoadingOnUpdate = true;
+    try {
+      const result = await this.commentService.delete(commentId);
+
+      const index = this.letter.comments.findIndex((c) => c._id === commentId);
+      if (index !== -1) this.letter.comments.splice(index, 1);
+
+      this.toastr.success('The comment has been deleted successfully');
+    } catch (err) {
+      this.toastr.error(err.error);
+    } finally {
+      this.isLoadingOnUpdate = false;
+    }
   }
 
   async saveComment(f) {
@@ -96,7 +186,7 @@ export class LetterComponent implements OnInit, OnDestroy {
   }
 
   async deleteContent(wordId) {
-    this.isLoadingOnDelete = true;
+    this.isLoadingOnUpdate = true;
     try {
       const result = await this.letterService.deleteWord(
         this.letter.letterId,
@@ -110,7 +200,7 @@ export class LetterComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.toastr.error(err.error);
     } finally {
-      this.isLoadingOnDelete = false;
+      this.isLoadingOnUpdate = false;
     }
   }
 

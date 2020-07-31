@@ -1,13 +1,12 @@
-import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
-import { Letter } from './../../../shared/models/letter';
-import { LetterService } from './../../../shared/services/letter.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
-import { Subscription } from 'rxjs';
-import { StorageKey } from 'shared/models/storage.model';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'shared/services/auth.service';
 import { StorageService } from 'shared/services/storage.service';
+
+import { Letter } from './../../../shared/models/letter';
+import { LetterService } from './../../../shared/services/letter.service';
 
 @Component({
   // tslint:disable-next-line: component-selector

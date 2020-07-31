@@ -25,22 +25,10 @@
       fxLayoutAlign="space-evenly center"
       fxLayoutGap="1%"
     >
-      <!-- <ul class="list-group">
-        <li class="list-group-item">{{ letter.title }}</li>
-        <div fxLayout="row" fxLayoutAlign="space-around center">
-          <button color="primary" mat-raised-button>Edit</button>
-        </div>
-      </ul> -->
-
       <ul class="list-group" *ngFor="let word of letter.words">
-        <!-- <li class="list-group-item my-1">
+        <li class="list-group-item my-1">
           <span class="word">{{ word.name }}</span>
-          {{ word.description }}
-        </li> -->
-        <li class="list-group-item my-1"
-        [innerHTML]="word.description"
-        >
-          
+          <span [innerHTML]="word.description"></span>
         </li>
         <div
           fxLayout="row"
@@ -52,20 +40,21 @@
             <mat-icon>edit</mat-icon>
           </button>
 
-          <button
-            color="primary"
-            (click)="deleteContent(word._id)"
-            mat-mini-fab
-          >
-            <mat-icon *ngIf="!isLoadingOnDelete">delete </mat-icon>
-            <mat-icon *ngIf="isLoadingOnDelete"
+          <button color="warn" (click)="deleteContent(word._id)" mat-mini-fab>
+            <mat-icon *ngIf="!isLoadingOnUpdate">delete </mat-icon>
+            <mat-icon *ngIf="isLoadingOnUpdate"
               ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
             ></mat-icon>
           </button>
         </div>
       </ul>
 
-      <button color="primary" mat-raised-button (click)="editWord(null)">
+      <button
+        color="primary"
+        class="my-4 new-word"
+        mat-raised-button
+        (click)="editWord(null)"
+      >
         Add New
       </button>
 
@@ -73,11 +62,69 @@
 
       <ul class="list-group" *ngFor="let comment of letter.comments">
         <li class="list-group-item">
-          {{ comment.content }}
-          <span class="user-comment"
-            >{{ comment.user.firstName }} {{ comment.user.lastName }} CreatedAt
-            {{ comment.createAt | date: "short" }}</span
+          <div
+            class="comment mb-2 p-2"
+            [ngClass]="{
+              'comment-not-approved': !comment.isApproved,
+              'comment-approved': comment.isApproved
+            }"
           >
+            <span [innerHTML]="comment.content"></span>
+            <span class="user-comment"
+              >{{ comment.user.firstName }}
+              {{ comment.user.lastName }} CreatedAt
+              {{ comment.createAt | date: "short" }}</span
+            >
+          </div>
+          <div *ngIf="comment?.replies.length">
+            <ul
+              class="list-group replies"
+              *ngFor="let reply of comment.replies"
+            >
+              <li
+                class="list-group-item mt-3 mb-2 p-2"
+                [ngClass]="{
+                  'comment-not-approved': !reply.isApproved
+                }"
+              >
+                <span [innerHTML]="reply.content"></span>
+                <span class="user-comment"
+                  >{{ reply.user.firstName }}
+                  {{ reply.user.lastName }} CreatedAt
+                  {{ reply.createAt | date: "short" }}</span
+                >
+              </li>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="10%"
+                class="mt-2"
+              >
+                <button
+                  color="primary"
+                  (click)="approveCommentReply(comment._id, reply)"
+                  mat-mini-fab
+                >
+                  <mat-icon color="accent" *ngIf="!reply.isApproved"
+                    >thumb_up_alt</mat-icon
+                  >
+                  <mat-icon *ngIf="reply.isApproved">thumb_down_alt</mat-icon>
+                </button>
+
+                <button
+                  color="warn"
+                  (click)="deleteCommentReply(comment._id, reply._id)"
+                  mat-mini-fab
+                >
+                  <mat-icon *ngIf="!isLoadingOnUpdate">delete </mat-icon>
+                  <mat-icon *ngIf="isLoadingOnUpdate"
+                    ><mat-spinner mode="indeterminate" diameter="21">
+                    </mat-spinner
+                  ></mat-icon>
+                </button>
+              </div>
+            </ul>
+          </div>
         </li>
         <div
           fxLayout="row"
@@ -85,28 +132,31 @@
           fxLayoutGap="10%"
           class="mt-2"
         >
-          <button color="primary" (click)="editComment(comment)" mat-mini-fab>
-            <mat-icon>edit</mat-icon>
-          </button>
           <button
             color="primary"
             (click)="approveComment(comment)"
             mat-mini-fab
           >
-            <mat-icon *ngIf="!comment.isApproved">thumb_up_alt</mat-icon>
+            <mat-icon color="accent" *ngIf="!comment.isApproved"
+              >thumb_up_alt</mat-icon
+            >
             <mat-icon *ngIf="comment.isApproved">thumb_down_alt</mat-icon>
           </button>
-          <button color="primary" (click)="replyComment(comment)" mat-mini-fab>
+          <button
+            color="primary"
+            (click)="replyOnComment(comment)"
+            mat-mini-fab
+          >
             <mat-icon>reply</mat-icon>
           </button>
 
           <button
-            color="primary"
+            color="warn"
             (click)="deleteComment(comment._id)"
             mat-mini-fab
           >
-            <mat-icon *ngIf="!isLoadingOnDelete">delete </mat-icon>
-            <mat-icon *ngIf="isLoadingOnDelete"
+            <mat-icon *ngIf="!isLoadingOnUpdate">delete </mat-icon>
+            <mat-icon *ngIf="isLoadingOnUpdate"
               ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
             ></mat-icon>
           </button>
@@ -120,17 +170,12 @@
         fxLayoutAlign="space-evenly center"
         fxLayoutGap="1%"
       >
-        <!-- <ul class="list-group">
-          <li class="list-group-item">{{ letter.title }}</li>
-        </ul> -->
-        <!-- <div *ngIf="letter.words?.length && !isLoading; else noWords"> -->
         <ul class="list-group" *ngFor="let word of letter.words">
           <li class="list-group-item my-1">
             <span class="word">{{ word.name }}</span>
-            {{ word.description }}
+            <span [innerHTML]="word.description"></span>
           </li>
         </ul>
-        <!-- </div> -->
 
         <ng-template #noWords>
           <h3>
@@ -142,24 +187,40 @@
         <h2>Comments</h2>
 
         <ul class="list-group" *ngFor="let comment of comments">
-          <li
-            class="list-group-item"
-            fxLayout="column"
-            fxLayoutAlign="center center"
-          >
-            {{ comment.content }}
-            <span class="user-comment"
-              >{{ comment.user.firstName }}
-              {{ comment.user.lastName }} CreatedAt
-              {{ comment.createAt | date: "short" }}</span
-            >
-            <button
-              color="primary"
-              (click)="replyComment(comment)"
-              mat-mini-fab
-            >
-              <mat-icon>reply</mat-icon>
-            </button>
+          <li class="list-group-item">
+            <div class="comment comment-approved mb-2 p-2">
+              <span [innerHTML]="comment.content"></span>
+              <span class="user-comment"
+                >{{ comment.user.firstName }}
+                {{ comment.user.lastName }} CreatedAt
+                {{ comment.createAt | date: "short" }}</span
+              >
+            </div>
+            <div *ngIf="comment?.replies.length">
+              <ul
+                class="list-group replies"
+                *ngFor="let reply of comment.replies"
+              >
+                <li *ngIf="reply.isApproved" class="list-group-item my-2">
+                  <span [innerHTML]="reply.content"></span>
+                  <span class="user-comment"
+                    >{{ reply.user.firstName }}
+                    {{ reply.user.lastName }} CreatedAt
+                    {{ reply.createAt | date: "short" }}</span
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <button
+                color="primary"
+                (click)="replyOnComment(comment)"
+                mat-mini-fab
+              >
+                <mat-icon>reply</mat-icon>
+              </button>
+            </div>
           </li>
         </ul>
       </div>

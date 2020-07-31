@@ -10,7 +10,27 @@ export class CommentService extends CrudService {
   constructor(http: HttpClient) {
     super(http);
   }
-  async create(form) {
-    return this.post(form);
+  async create(body) {
+    return this.post(body);
+  }
+
+  async update(body, commentId) {
+    return this.putById(body, commentId);
+  }
+
+  async delete(commentId) {
+    return this.deleteById(commentId);
+  }
+
+  async addReply(body, commentId) {
+    return this.postById(body, commentId);
+  }
+
+  async deleteReply(commentId: any, replyId: any) {
+    return this.deleteById(commentId + '/replyId/' + replyId);
+  }
+
+  async updateReply(obj, commentId: any, replyId: any) {
+    return this.patchById(obj, commentId + '/replyId/' + replyId);
   }
 }

@@ -13,14 +13,7 @@
     >Vocabulary</span
   >
 </div>
-  <!--<mat-form-field class="example-full-width mx-3">
-    <input type="text" matInput placeholder="Search" />
-    <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>-->
-  <!-- <mat-form-field class="example-full-width mx-3">
-    <input type="text" matInput placeholder="Search" />
-   <a matSuffix><mat-icon >search</mat-icon></a> 
-  </mat-form-field> -->
+  
 
   <mat-form-field class="example-full-width mx-3">
     <input matInput type="text" (keydown.enter)="search(input)" placeholder="Search" #input >
@@ -34,7 +27,6 @@
     </button>
   </mat-form-field>
 
-  <!-- <span class="example-spacer"></span> -->
 
   <a
     *ngIf="!authService.isLogged(); else logged"
@@ -78,7 +70,7 @@
       authService.isLogged() && authService.currentUser.roles.includes('ADMIN')
     "
   >
-    <a
+    <!-- <a
       mat-menu-item
       routerLink="/admin/letters"
       routerLinkActive="active-list-item"
@@ -92,7 +84,7 @@
       routerLinkActive="active-list-item"
     >
       <mat-icon>shopping_basket</mat-icon><span>Manage Comments</span></a
-    >
+    > -->
     <a
       mat-menu-item
       routerLink="/admin/users"
@@ -154,7 +146,6 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div style="height: 88vh;">
-      <!-- <router-outlet></router-outlet> -->
       <app-home></app-home>
     </div>
   </mat-sidenav-content>

@@ -57,6 +57,17 @@ export abstract class CrudService<T = any> {
     }
     return response;
   }
+  public async postById(body, id: number | string): Promise<any> {
+    let response = null;
+    try {
+      response = await this.http
+        .post(`${this.url}/${this.endpoint}/${id}`, body)
+        .toPromise();
+    } catch (error) {
+      response = this.errorHandler('GET', error);
+    }
+    return response;
+  }
 
   public async post(body): Promise<any> {
     let response = null;

@@ -1,10 +1,28 @@
 .list-group-item {
   background-color: #ffecb3;
-  //   max-width: 75%;
+}
+
+.comment-not-approved {
+  background-color: #dc3545;
+}
+.comment-approved {
+  background-color: #ffe082;
+}
+
+.comment {
+  border-radius: 1%;
 }
 
 .list-group {
-  max-width: 90%;
+  max-width: 80%;
+}
+
+.replies {
+  max-width: 100%;
+}
+
+.new-word{
+  width: 50%;
 }
 
 .comment-card {
@@ -16,7 +34,9 @@
   width: 100%;
 }
 
-
+.bold {
+  font-weight: 700;
+}
 
 .word {
   font-weight: 700;

@@ -9,9 +9,10 @@ import { SharedModule } from './../shared/shared.module';
 import { LetterComponent } from './components/letter/letter.component';
 import { EditWordComponent } from './dialogs/edit-word/edit-word.component';
 import { VocabularyRoutingModule } from './vocabulary-routing.module';
+import { CommentReplyComponent } from './dialogs/comment-reply/comment-reply.component';
 
 @NgModule({
-  declarations: [LetterComponent, EditWordComponent],
+  declarations: [LetterComponent, EditWordComponent, CommentReplyComponent],
   imports: [
     CommonModule,
     VocabularyRoutingModule,
@@ -22,6 +23,6 @@ import { VocabularyRoutingModule } from './vocabulary-routing.module';
     TextFieldModule,
   ],
   exports: [LetterComponent],
-  entryComponents: [EditWordComponent],
+  entryComponents: [EditWordComponent, CommentReplyComponent],
 })
 export class VocabularyModule {}
