@@ -1,6 +1,17 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col" [ngClass.gt-sm]="'page-content'">
+      <div
+        *ngIf="isHomeRoute()"
+        class="my-3"
+        fxLayout="column"
+        fxLayoutAlign="space-around center"
+        fxLayoutGap="3%"
+      >
+        <h3>
+          Этимологический Словарь Связи Русского и Святого Еврейского Языков
+        </h3>
+      </div>
       <router-outlet></router-outlet>
     </div>
     <div

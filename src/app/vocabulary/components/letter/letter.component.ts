@@ -1,3 +1,4 @@
+import { ConfirmationDialogComponent } from './../../../shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -79,10 +80,10 @@ export class LetterComponent implements OnInit, OnDestroy {
     }
   }
   async replyOnComment(comment: Comment) {
-
-
     if (!this.authService.isLogged())
-      return this.toastr.error('You could not reply on the comment, please login.');
+      return this.toastr.error(
+        'You could not reply on the comment, please login.'
+      );
 
     const commentCopy = JSON.parse(JSON.stringify(comment));
 
@@ -129,37 +130,60 @@ export class LetterComponent implements OnInit, OnDestroy {
   }
 
   async deleteCommentReply(commentId, replyId) {
-    this.isLoadingOnUpdate = true;
-    try {
-      const result = await this.commentService.deleteReply(commentId, replyId);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: "Do you confirm the deletion of this comment's reply?",
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (!result) return;
 
-      const index = this.letter.comments.findIndex((c) => c._id === commentId);
-      if (index !== -1) this.letter.comments[index] = result;
+      this.isLoadingOnUpdate = true;
+      try {
+        const result = await this.commentService.deleteReply(
+          commentId,
+          replyId
+        );
 
-      this.toastr.success(
-        'The reply of the comment has been deleted successfully'
-      );
-    } catch (err) {
-      this.toastr.error(err.error);
-    } finally {
-      this.isLoadingOnUpdate = false;
-    }
+        const index = this.letter.comments.findIndex(
+          (c) => c._id === commentId
+        );
+        if (index !== -1) this.letter.comments[index] = result;
+
+        this.toastr.success(
+          'The reply of the comment has been deleted successfully'
+        );
+      } catch (err) {
+        this.toastr.error(err.error);
+      } finally {
+        this.isLoadingOnUpdate = false;
+      }
+    });
   }
 
   async deleteComment(commentId) {
-    this.isLoadingOnUpdate = true;
-    try {
-      const result = await this.commentService.delete(commentId);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: 'Do you confirm the deletion of this comment?',
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (!result) return;
 
-      const index = this.letter.comments.findIndex((c) => c._id === commentId);
-      if (index !== -1) this.letter.comments.splice(index, 1);
+      this.isLoadingOnUpdate = true;
+      try {
+        await this.commentService.delete(commentId);
 
-      this.toastr.success('The comment has been deleted successfully');
-    } catch (err) {
-      this.toastr.error(err.error);
-    } finally {
-      this.isLoadingOnUpdate = false;
-    }
+        const index = this.letter.comments.findIndex(
+          (c) => c._id === commentId
+        );
+        if (index !== -1) this.letter.comments.splice(index, 1);
+
+        this.toastr.success('The comment has been deleted successfully');
+      } catch (err) {
+        this.toastr.error(err.error);
+      } finally {
+        this.isLoadingOnUpdate = false;
+      }
+    });
   }
 
   async saveComment(f) {
@@ -190,22 +214,30 @@ export class LetterComponent implements OnInit, OnDestroy {
   }
 
   async deleteContent(wordId) {
-    this.isLoadingOnUpdate = true;
-    try {
-      const result = await this.letterService.deleteWord(
-        this.letter.letterId,
-        wordId
-      );
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '350px',
+      data: 'Do you confirm the deletion of this content?',
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (!result) return;
 
-      const index = this.letter.words.findIndex((w) => w._id === wordId);
-      if (index !== -1) this.letter.words.splice(index, 1);
+      this.isLoadingOnUpdate = true;
+      try {
+        const result = await this.letterService.deleteWord(
+          this.letter.letterId,
+          wordId
+        );
 
-      this.toastr.success('The word has been deleted successfully');
-    } catch (err) {
-      this.toastr.error(err.error);
-    } finally {
-      this.isLoadingOnUpdate = false;
-    }
+        const index = this.letter.words.findIndex((w) => w._id === wordId);
+        if (index !== -1) this.letter.words.splice(index, 1);
+
+        this.toastr.success('The word has been deleted successfully');
+      } catch (err) {
+        this.toastr.error(err.error);
+      } finally {
+        this.isLoadingOnUpdate = false;
+      }
+    });
   }
 
   editWord(word: Word | null) {

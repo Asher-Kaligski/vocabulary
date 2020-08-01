@@ -1,0 +1,17 @@
+<div class="container" fxLayout="column" fxLayoutAlign="space-between none">
+  <h2 mat-dialog-title class="text-center">Delete Confirmation</h2>
+
+  <div class="message mb-3 p-2">{{ message }}</div>
+
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly center">
+    <button mat-raised-button color="accent" (click)="onNoClick()">No</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [mat-dialog-close]="true"
+      cdkFocusInitial
+    >
+      Yes
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -1,3 +1,4 @@
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { UserFormComponent } from 'shared/components/user-form/user-form.component';
@@ -9,10 +10,17 @@ import { AuthService } from './services/auth.service';
 import { CommentService } from './services/comment.service';
 import { LetterService } from './services/letter.service';
 import { UserService } from './services/user.service';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
-  declarations: [UserFormComponent],
-  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule],
+  declarations: [UserFormComponent, ConfirmationDialogComponent],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule,
+  ],
   providers: [
     AuthService,
     AuthGuard,
@@ -21,5 +29,6 @@ import { UserService } from './services/user.service';
     CommentService,
   ],
   exports: [UserFormComponent],
+  entryComponents: [ConfirmationDialogComponent],
 })
 export class SharedModule {}

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
 
@@ -18,10 +19,15 @@ export class HomeComponent implements OnInit {
 
   constructor(
     public media: MediaObserver,
-    private letterService: LetterService
+    private letterService: LetterService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.letters$ = this.letterService.getLettersNames();
+  }
+
+  isHomeRoute() {
+    return this.router.url === '/';
   }
 }
