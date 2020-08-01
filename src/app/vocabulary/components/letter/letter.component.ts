@@ -73,12 +73,17 @@ export class LetterComponent implements OnInit, OnDestroy {
       if (index !== -1)
         this.letter.comments[index].isApproved = result.isApproved;
 
-      this.toastr.success('The comment has been deleted successfully');
+      this.toastr.success('The comment has been approved successfully');
     } catch (err) {
       this.toastr.error(err.error);
     }
   }
   async replyOnComment(comment: Comment) {
+
+
+    if (!this.authService.isLogged())
+      return this.toastr.error('You could not reply on the comment, please login.');
+
     const commentCopy = JSON.parse(JSON.stringify(comment));
 
     const dialogRef = this.dialog.open(CommentReplyComponent, {
@@ -90,7 +95,6 @@ export class LetterComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('result', result);
       if (!result) return;
 
       const index = this.letter.comments.findIndex(
