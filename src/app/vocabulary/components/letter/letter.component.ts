@@ -245,7 +245,7 @@ export class LetterComponent implements OnInit, OnDestroy {
 
     const dialogRef = this.dialog.open(EditWordComponent, {
       data: { word, letterId: this.letter.letterId },
-      height: '70vh',
+      height: '90vh',
       width: '800px',
       disableClose: true,
       autoFocus: true,

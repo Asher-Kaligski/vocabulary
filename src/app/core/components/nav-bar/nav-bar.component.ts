@@ -28,7 +28,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.letters = await this.letterService.getLettersNames();
-    console.log(this.letters);
   }
 
   ngOnDestroy() {}

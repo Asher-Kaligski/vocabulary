@@ -1,3 +1,4 @@
+import { QuillModule } from 'ngx-quill';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -21,6 +22,7 @@ import { CommentReplyComponent } from './dialogs/comment-reply/comment-reply.com
     SharedModule,
     FlexLayoutModule,
     TextFieldModule,
+    QuillModule
   ],
   exports: [LetterComponent],
   entryComponents: [EditWordComponent, CommentReplyComponent],

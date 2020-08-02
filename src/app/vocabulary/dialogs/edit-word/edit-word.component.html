@@ -30,9 +30,7 @@
         </ng-container>
       </mat-form-field>
 
-      
-
-      <mat-form-field>
+      <!--  <mat-form-field>
         <mat-label>Description</mat-label>
         <textarea
           matInput
@@ -60,18 +58,33 @@
             {{ description.errors.maxlength.requiredLength }} characters
           </mat-error>
         </ng-container>
-      </mat-form-field>
+      </mat-form-field>>-->
     </form>
+
+    <mat-label>Description</mat-label>
+    <quill-editor
+      [styles]="{ height: '350px' }"
+      [modules]="modules"
+      [(ngModel)]="word.description"
+      (onContentChanged)="contentChange($event)"
+    ></quill-editor>
   </mat-dialog-content>
 
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly center">
     <button mat-raised-button class="mx-3" color="accent" (click)="close()">
       Close
     </button>
-    <button [disabled]="!f.valid" mat-raised-button class="mx-3" color="primary" (click)="save(f)" >
+    <button
+      [disabled]="!f.valid"
+      mat-raised-button
+      class="mx-3"
+      color="primary"
+      (click)="save(f)"
+    >
       Save
-      <mat-icon *ngIf="isLoading"><mat-spinner mode="indeterminate" diameter="21">
-      </mat-spinner></mat-icon>
+      <mat-icon *ngIf="isLoading"
+        ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
+      ></mat-icon>
     </button>
   </mat-dialog-actions>
 </div>

@@ -1,4 +1,3 @@
-import { VocabularyModule } from './vocabulary/vocabulary.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -7,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomFormsModule } from 'ng2-validation';
+import { QuillModule } from 'ngx-quill';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AdminModule } from './admin/admin.module';
@@ -17,6 +17,7 @@ import { HttpConfigInterceptor } from './core/services/interceptor.service';
 import { MembershipModule } from './membership/membership.module';
 import { MaterialModule } from './shared/material.module';
 import { SharedModule } from './shared/shared.module';
+import { VocabularyModule } from './vocabulary/vocabulary.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,6 +42,7 @@ import { SharedModule } from './shared/shared.module';
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    QuillModule.forRoot(),
   ],
   providers: [
     {

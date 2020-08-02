@@ -1,6 +1,18 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~ngx-toastr/toastr";
 
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.bubble.css';
+@import '~quill/dist/quill.snow.css';
+@import '~quill-emoji/dist/quill-emoji.css';
+//@import '~quill-mention/dist/quill.mention.min.css';
+
+// "node_modules/quill/dist/quill.core.css",
+//               "node_modules/quill/dist/quill.bubble.css",
+//               "node_modules/quill/dist/quill.snow.css",
+//               "node_modules/quill-emoji/dist/quill-emoji.css",
+//               "node_modules/quill-mention/dist/quill.mention.min.css"
+
 $fa-font-path: "../node_modules/font-awesome/fonts";
 @import "../node_modules/font-awesome/scss/font-awesome.scss";
 

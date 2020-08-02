@@ -41,7 +41,9 @@
           </button>
 
           <button color="warn" (click)="deleteContent(word._id)" mat-mini-fab>
-            <mat-icon *ngIf="!isLoadingOnUpdate">delete </mat-icon>
+            <mat-icon *ngIf="!isLoadingOnUpdate"
+              >delete
+            </mat-icon>
             <mat-icon *ngIf="isLoadingOnUpdate"
               ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
             ></mat-icon>
