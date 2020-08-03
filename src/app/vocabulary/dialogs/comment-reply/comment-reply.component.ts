@@ -1,6 +1,10 @@
+import 'quill-emoji/dist/quill-emoji.js';
+
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { quillToolbar } from 'shared/models/quill-toolbar.ts';
+import { shortQuillToolbar } from 'shared/models/short-quill-toolbar.ts';
 
 import { Comment } from './../../../shared/models/comment';
 import { AuthService } from './../../../shared/services/auth.service';
@@ -12,6 +16,7 @@ import { CommentService } from './../../../shared/services/comment.service';
   styleUrls: ['./comment-reply.component.scss'],
 })
 export class CommentReplyComponent {
+  modules = {};
   isLoading = false;
 
   constructor(
@@ -20,7 +25,14 @@ export class CommentReplyComponent {
     private commentService: CommentService,
     private authService: AuthService,
     private toastr: ToastrService
-  ) {}
+  ) {
+    if (
+      this.authService.isLogged() &&
+      this.authService.currentUser.roles.includes('ADMIN')
+    )
+      this.modules = quillToolbar;
+    else this.modules = shortQuillToolbar;
+  }
 
   async save(form) {
     if (!form.valid) return;

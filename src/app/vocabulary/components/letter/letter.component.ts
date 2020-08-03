@@ -1,10 +1,14 @@
-import { ConfirmationDialogComponent } from './../../../shared/dialogs/confirmation-dialog/confirmation-dialog.component';
+import 'quill-emoji/dist/quill-emoji.js';
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { quillToolbar } from 'shared/models/quill-toolbar.ts';
+import { shortQuillToolbar } from 'shared/models/short-quill-toolbar.ts';
 
+import { ConfirmationDialogComponent } from './../../../shared/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { Comment } from './../../../shared/models/comment';
 import { Letter } from './../../../shared/models/letter';
 import { Word } from './../../../shared/models/word';
@@ -20,6 +24,7 @@ import { EditWordComponent } from './../../dialogs/edit-word/edit-word.component
   styleUrls: ['./letter.component.scss'],
 })
 export class LetterComponent implements OnInit, OnDestroy {
+  modules = {};
   letter: Letter;
   comments: any;
   subscription: Subscription;
@@ -34,7 +39,14 @@ export class LetterComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     public authService: AuthService,
     private dialog: MatDialog
-  ) {}
+  ) {
+    if (
+      this.authService.isLogged() &&
+      this.authService.currentUser.roles.includes('ADMIN')
+    )
+      this.modules = quillToolbar;
+    else this.modules = shortQuillToolbar;
+  }
 
   ngOnInit(): void {
     this.subscription = this.route.queryParams.subscribe((param) => {

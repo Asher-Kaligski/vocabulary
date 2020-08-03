@@ -41,9 +41,7 @@
           </button>
 
           <button color="warn" (click)="deleteContent(word._id)" mat-mini-fab>
-            <mat-icon *ngIf="!isLoadingOnUpdate"
-              >delete
-            </mat-icon>
+            <mat-icon *ngIf="!isLoadingOnUpdate">delete </mat-icon>
             <mat-icon *ngIf="isLoadingOnUpdate"
               ><mat-spinner mode="indeterminate" diameter="21"> </mat-spinner
             ></mat-icon>
@@ -234,20 +232,8 @@
           fxLayout="column"
           fxLayoutAlign="space-around stretch"
         >
-          <mat-form-field class="comment-area">
+          <div class="comment-area mb-3">
             <mat-label>Leave a comment</mat-label>
-            <textarea
-              required
-              matInput
-              cdkTextareaAutosize
-              cdkAutosizeMinRows="1"
-              cdkAutosizeMaxRows="10"
-              minlength="2"
-              maxlength="10000"
-              ngModel
-              name="content"
-              #content="ngModel"
-            ></textarea>
             <ng-container *ngIf="content.touched && !content.valid">
               <mat-error *ngIf="content.errors.required">
                 Comment is required
@@ -261,7 +247,17 @@
                 {{ content.errors.maxlength.requiredLength }} characters
               </mat-error>
             </ng-container>
-          </mat-form-field>
+            <quill-editor
+              [styles]="{ height: '100px' }"
+              required
+              [modules]="modules"
+              minlength="2"
+              maxlength="1000"
+              ngModel
+              name="content"
+              #content="ngModel"
+            ></quill-editor>
+          </div>
         </form>
       </mat-dialog-content>
 

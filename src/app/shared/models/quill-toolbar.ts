@@ -21,7 +21,7 @@ const quillToolbar = {
 
     ['clean'], // remove formatting button
 
-    ['link', 'image', 'video'], // link and image, video
+    ['link', 'video'], // link and image, video
     ['emoji'],
   ],
 };

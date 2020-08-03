@@ -5,34 +5,32 @@
 
   <mat-dialog-content>
     <form #f="ngForm">
-      <mat-form-field>
-        <mat-label>Reply</mat-label>
-        <textarea
-          matInput
-          required
-          cdkTextareaAutosize
-          cdkAutosizeMinRows="1"
-          cdkAutosizeMaxRows="10"
-          minlength="2"
-          maxlength="1000"
-          ngModel
-          name="content"
-          #content="ngModel"
-        ></textarea>
-        <ng-container *ngIf="content.touched && !content.valid">
-          <mat-error *ngIf="content.errors.required">
-            Reply is required
-          </mat-error>
-          <mat-error *ngIf="content.errors.minlength">
-            Reply should be minimum
-            {{ content.errors.minlength.requiredLength }} characters
-          </mat-error>
-          <mat-error *ngIf="content.errors.maxlength">
-            Reply should be maximum
-            {{ content.errors.maxlength.requiredLength }} characters
-          </mat-error>
-        </ng-container>
-      </mat-form-field>
+      <mat-label>Reply</mat-label>
+
+      <ng-container *ngIf="content.touched && !content.valid">
+        <mat-error *ngIf="content.errors.required">
+          Reply is required
+        </mat-error>
+        <mat-error *ngIf="content.errors.minlength">
+          Reply should be minimum
+          {{ content.errors.minlength.requiredLength }} characters
+        </mat-error>
+        <mat-error *ngIf="content.errors.maxlength">
+          Reply should be maximum
+          {{ content.errors.maxlength.requiredLength }} characters
+        </mat-error>
+      </ng-container>
+
+      <quill-editor
+        [styles]="{ height: '200px' }"
+        required
+        minlength="2"
+        maxlength="1000"
+        [modules]="modules"
+        ngModel
+        name="content"
+        #content="ngModel"
+      ></quill-editor>
     </form>
   </mat-dialog-content>
 

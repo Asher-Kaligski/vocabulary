@@ -30,44 +30,31 @@
         </ng-container>
       </mat-form-field>
 
-      <!--  <mat-form-field>
-        <mat-label>Description</mat-label>
-        <textarea
-          matInput
-          required
-          cdkTextareaAutosize
-          cdkAutosizeMinRows="1"
-          cdkAutosizeMaxRows="10"
-          minlength="2"
-          maxlength="10000"
-          [(ngModel)]="word.description"
-          name="description"
-          #description="ngModel"
-          
-        ></textarea>
-        <ng-container *ngIf="description.touched && !description.valid">
-          <mat-error *ngIf="description.errors.required">
-            Word description is required
-          </mat-error>
-          <mat-error *ngIf="description.errors.minlength">
-            Word description should be minimum
-            {{ description.errors.minlength.requiredLength }} characters
-          </mat-error>
-          <mat-error *ngIf="description.errors.maxlength">
-            Word description should be maximum
-            {{ description.errors.maxlength.requiredLength }} characters
-          </mat-error>
-        </ng-container>
-      </mat-form-field>>-->
+      <mat-label>Description</mat-label>
+      <ng-container *ngIf="description.touched && !description.valid">
+        <mat-error *ngIf="description.errors.required">
+          Word description is required
+        </mat-error>
+        <mat-error *ngIf="description.errors.minlength">
+          Word description should be minimum
+          {{ description.errors.minlength.requiredLength }} characters
+        </mat-error>
+        <mat-error *ngIf="description.errors.maxlength">
+          Word description should be maximum
+          {{ description.errors.maxlength.requiredLength }} characters
+        </mat-error>
+      </ng-container>
+      <quill-editor
+        [styles]="{ height: '250px' }"
+        required
+        minlength="2"
+        maxlength="10000"
+        [modules]="modules"
+        [(ngModel)]="word.description"
+        #description="ngModel"
+        name="description"
+      ></quill-editor>
     </form>
-
-    <mat-label>Description</mat-label>
-    <quill-editor
-      [styles]="{ height: '350px' }"
-      [modules]="modules"
-      [(ngModel)]="word.description"
-      (onContentChanged)="contentChange($event)"
-    ></quill-editor>
   </mat-dialog-content>
 
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly center">
