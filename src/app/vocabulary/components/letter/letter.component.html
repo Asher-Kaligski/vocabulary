@@ -76,7 +76,16 @@
               {{ comment.createAt | date: "short" }}</span
             >
           </div>
-          <div *ngIf="comment?.replies.length">
+          <mat-expansion-panel *ngIf="comment?.replies.length">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                See all replies
+              </mat-panel-title>
+              <mat-panel-description>
+                <mat-icon>insert_comment</mat-icon>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
             <ul
               class="list-group replies"
               *ngFor="let reply of comment.replies"
@@ -124,7 +133,7 @@
                 </button>
               </div>
             </ul>
-          </div>
+          </mat-expansion-panel>
         </li>
         <div
           fxLayout="row"
@@ -147,7 +156,7 @@
             (click)="replyOnComment(comment)"
             mat-mini-fab
           >
-            <mat-icon>reply</mat-icon>
+            <mat-icon>add_comment</mat-icon>
           </button>
 
           <button
@@ -196,7 +205,16 @@
                 {{ comment.createAt | date: "short" }}</span
               >
             </div>
-            <div *ngIf="comment?.replies.length">
+            <mat-expansion-panel *ngIf="comment?.replies.length" class="mb-2">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  See all replies
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-icon>insert_comment</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
               <ul
                 class="list-group replies"
                 *ngFor="let reply of comment.replies"
@@ -210,7 +228,7 @@
                   >
                 </li>
               </ul>
-            </div>
+            </mat-expansion-panel>
 
             <div fxLayout="row" fxLayoutAlign="center center">
               <button
@@ -218,7 +236,7 @@
                 (click)="replyOnComment(comment)"
                 mat-mini-fab
               >
-                <mat-icon>reply</mat-icon>
+                <mat-icon>add_comment</mat-icon>
               </button>
             </div>
           </li>
