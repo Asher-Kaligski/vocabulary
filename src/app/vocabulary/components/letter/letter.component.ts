@@ -31,6 +31,7 @@ export class LetterComponent implements OnInit, OnDestroy {
   letterName: string;
   isLoading = false;
   isLoadingOnUpdate = false;
+  updatedCommentId: string = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -133,6 +134,8 @@ export class LetterComponent implements OnInit, OnDestroy {
       const index = this.letter.comments.findIndex((c) => c._id === commentId);
       if (index !== -1) this.letter.comments[index] = result;
 
+      this.updatedCommentId = this.letter.comments[index]._id;
+
       this.toastr.success(
         'The reply of the comment has been updated successfully'
       );
@@ -141,6 +144,7 @@ export class LetterComponent implements OnInit, OnDestroy {
     }
   }
 
+  
   async deleteCommentReply(commentId, replyId) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
@@ -160,6 +164,8 @@ export class LetterComponent implements OnInit, OnDestroy {
           (c) => c._id === commentId
         );
         if (index !== -1) this.letter.comments[index] = result;
+
+        this.updatedCommentId = this.letter.comments[index]._id;
 
         this.toastr.success(
           'The reply of the comment has been deleted successfully'

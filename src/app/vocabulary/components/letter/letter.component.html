@@ -76,7 +76,10 @@
               {{ comment.createAt | date: "short" }}</span
             >
           </div>
-          <mat-expansion-panel *ngIf="comment?.replies.length">
+          <mat-expansion-panel
+            *ngIf="comment?.replies.length"
+            [expanded]="(updatedCommentId === comment._id) ? true : false"
+          >
             <mat-expansion-panel-header>
               <mat-panel-title>
                 See all replies
