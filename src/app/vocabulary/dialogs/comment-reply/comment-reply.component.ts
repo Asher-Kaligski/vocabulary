@@ -1,3 +1,4 @@
+import { MediaObserver } from '@angular/flex-layout';
 import 'quill-emoji/dist/quill-emoji.js';
 
 import { Component, Inject } from '@angular/core';
@@ -24,6 +25,7 @@ export class CommentReplyComponent {
     @Inject(MAT_DIALOG_DATA) public data: Comment,
     private commentService: CommentService,
     private authService: AuthService,
+    public media: MediaObserver,
     private toastr: ToastrService
   ) {
     if (

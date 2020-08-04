@@ -2,8 +2,14 @@
   background-color: #ffecb3;
 }
 
-.comment-not-approved {
-  background-color: #dc3545;
+.comment-not-approved,
+.not-approved {
+  background-color: #ff4081;
+}
+
+.not-approved {
+  padding: 5px;
+  border-radius: 2%;
 }
 .comment-approved {
   background-color: #ffe082;
@@ -42,7 +48,8 @@
   font-weight: 700;
 }
 
-.user-comment {
+.user-comment,
+.not-approved {
   margin-top: 10px;
   display: block;
   font-size: small;
@@ -55,16 +62,18 @@
   overflow-y: auto;
 }
 
-// .mat-expansion-panel-header-title,
-// .mat-expansion-panel-header-description {
-//   flex-basis: 0;
-// }
+
 
 .mat-expansion-panel-header-description {
-  justify-content: space-between;
-  align-items: center;
+  //  justify-content: space-between;
+  align-items: flex-end;
 }
 
-mat-expansion-panel{
+mat-expansion-panel {
   background-color: #ffecb3;
 }
+
+mat-panel-description {
+  flex-basis: 100%;
+}
+

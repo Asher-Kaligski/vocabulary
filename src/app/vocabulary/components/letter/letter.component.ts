@@ -1,3 +1,4 @@
+import { MediaObserver } from '@angular/flex-layout';
 import 'quill-emoji/dist/quill-emoji.js';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -39,6 +40,7 @@ export class LetterComponent implements OnInit, OnDestroy {
     private commentService: CommentService,
     private toastr: ToastrService,
     public authService: AuthService,
+    public media: MediaObserver,
     private dialog: MatDialog
   ) {
     if (
@@ -58,7 +60,18 @@ export class LetterComponent implements OnInit, OnDestroy {
         .then((result) => {
           this.isLoading = false;
           this.letter = result;
-          this.comments = this.letter.comments.filter((c) => c.isApproved);
+          // this.comments = this.letter.comments.filter((c) => c.isApproved);
+          this.comments = this.letter.comments.filter((c) => {
+            if (c.isApproved) return true;
+
+            if (
+              this.authService.isLogged() &&
+              c.user._id === this.authService.currentUser._id
+            )
+              return true;
+
+            return false;
+          });
         })
         .catch((err) => {
           this.isLoading = false;
@@ -92,6 +105,14 @@ export class LetterComponent implements OnInit, OnDestroy {
       this.toastr.error(err.error);
     }
   }
+
+  getCountNotApprovedReplies(comment: Comment) {
+    return comment.replies.reduce((accumulator, reply) => {
+      if (!reply.isApproved) return accumulator + 1;
+      else return accumulator;
+    }, 0);
+  }
+
   async replyOnComment(comment: Comment) {
     if (!this.authService.isLogged())
       return this.toastr.error(
@@ -111,10 +132,18 @@ export class LetterComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (!result) return;
 
-      const index = this.letter.comments.findIndex(
-        (c) => c._id === comment._id
-      );
-      if (index !== -1) this.letter.comments[index] = result;
+      if (this.authService.currentUser.roles.includes('ADMIN')) {
+        const index = this.letter.comments.findIndex(
+          (c) => c._id === comment._id
+        );
+        if (index !== -1) this.letter.comments[index] = result;
+        return;
+      }
+
+      const index = this.comments.findIndex((c) => c._id === comment._id);
+      if (index !== -1) this.comments[index] = result;
+
+      this.updatedCommentId = this.comments[index]._id;
     });
   }
 
@@ -144,7 +173,6 @@ export class LetterComponent implements OnInit, OnDestroy {
     }
   }
 
-  
   async deleteCommentReply(commentId, replyId) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
@@ -222,6 +250,8 @@ export class LetterComponent implements OnInit, OnDestroy {
       f.reset();
 
       if (comment.isApproved) this.letter.comments.push(comment);
+      else if (comment.user._id === this.authService.currentUser._id)
+        this.comments.push(comment);
 
       this.toastr.success(
         'The comment has been successfully saved, after approving with the owner of the website it will be posted'

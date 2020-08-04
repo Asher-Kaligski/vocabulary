@@ -78,14 +78,19 @@
           </div>
           <mat-expansion-panel
             *ngIf="comment?.replies.length"
-            [expanded]="(updatedCommentId === comment._id) ? true : false"
+            [expanded]="updatedCommentId === comment._id ? true : false"
           >
-            <mat-expansion-panel-header>
+          
+            <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
               <mat-panel-title>
                 See all replies
               </mat-panel-title>
               <mat-panel-description>
-                <mat-icon>insert_comment</mat-icon>
+                <mat-icon
+                  matBadgeColor="accent"
+                  [matBadge]="getCountNotApprovedReplies(comment)"
+                  >insert_comment</mat-icon
+                >
               </mat-panel-description>
             </mat-expansion-panel-header>
 
@@ -142,7 +147,7 @@
           fxLayout="row"
           fxLayoutAlign="center center"
           fxLayoutGap="10%"
-          class="mt-2"
+          class="my-2"
         >
           <button
             color="primary"
@@ -196,7 +201,7 @@
           </h3>
         </ng-template>
 
-        <h2>Comments</h2>
+        <h2 class="mt-3">Comments</h2>
 
         <ul class="list-group" *ngFor="let comment of comments">
           <li class="list-group-item">
@@ -207,14 +212,27 @@
                 {{ comment.user.lastName }} CreatedAt
                 {{ comment.createAt | date: "short" }}</span
               >
+              <span *ngIf="!comment.isApproved" class="not-approved"
+                >The comment is visible for you only until it will be
+                approved</span
+              >
             </div>
-            <mat-expansion-panel *ngIf="comment?.replies.length" class="mb-2">
-              <mat-expansion-panel-header>
+
+            <mat-expansion-panel
+              *ngIf="comment?.replies.length"
+              class="mb-2"
+              [expanded]="updatedCommentId === comment._id ? true : false"
+            >
+              <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
                 <mat-panel-title>
                   See all replies
                 </mat-panel-title>
                 <mat-panel-description>
-                  <mat-icon>insert_comment</mat-icon>
+                  <mat-icon
+                    matBadgeColor="accent"
+                    [matBadge]="comment?.replies.length"
+                    >insert_comment</mat-icon
+                  >
                 </mat-panel-description>
               </mat-expansion-panel-header>
 
@@ -222,18 +240,33 @@
                 class="list-group replies"
                 *ngFor="let reply of comment.replies"
               >
-                <li *ngIf="reply.isApproved" class="list-group-item my-2">
+                <li
+                  *ngIf="
+                    reply.isApproved ||
+                    (authService.isLogged() &&
+                      reply.user._id === authService.currentUser._id)
+                  "
+                  class="list-group-item my-2"
+                >
                   <span [innerHTML]="reply.content"></span>
                   <span class="user-comment"
                     >{{ reply.user.firstName }}
                     {{ reply.user.lastName }} CreatedAt
                     {{ reply.createAt | date: "short" }}</span
                   >
+                  <span *ngIf="!reply.isApproved" class="not-approved"
+                    >The reply on the comment is visible for you only until it
+                    will be approved</span
+                  >
                 </li>
               </ul>
             </mat-expansion-panel>
 
-            <div fxLayout="row" fxLayoutAlign="center center">
+            <div
+              *ngIf="comment.isApproved"
+              fxLayout="row"
+              fxLayoutAlign="center center"
+            >
               <button
                 color="primary"
                 (click)="replyOnComment(comment)"
@@ -246,14 +279,20 @@
         </ul>
       </div>
     </ng-template>
-    <mat-card class="comment-card">
+    <mat-card class="comment-card mb-2">
       <mat-dialog-content>
         <form
           #f="ngForm"
           fxLayout="column"
           fxLayoutAlign="space-around stretch"
         >
-          <div class="comment-area mb-3">
+          <div
+            *ngIf="
+              !media.isActive('sm') && !media.isActive('xs');
+              else notMobile
+            "
+            class="comment-area mb-3"
+          >
             <mat-label>Leave a comment</mat-label>
             <ng-container *ngIf="content.touched && !content.valid">
               <mat-error *ngIf="content.errors.required">
@@ -269,7 +308,7 @@
               </mat-error>
             </ng-container>
             <quill-editor
-              [styles]="{ height: '100px' }"
+              [styles]="{ height: '150px' }"
               required
               [modules]="modules"
               minlength="2"
@@ -279,6 +318,37 @@
               #content="ngModel"
             ></quill-editor>
           </div>
+
+          <ng-template #notMobile class="comment-area mb-3">
+            <mat-form-field>
+              <mat-label>Leave a comment</mat-label>
+              <textarea
+                required
+                matInput
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="10"
+                minlength="2"
+                maxlength="10000"
+                ngModel
+                name="content"
+                #content="ngModel"
+              ></textarea>
+              <ng-container *ngIf="content.touched && !content.valid">
+                <mat-error *ngIf="content.errors.required">
+                  Comment is required
+                </mat-error>
+                <mat-error *ngIf="content.errors.minlength">
+                  Comment should be minimum
+                  {{ content.errors.minlength.requiredLength }} characters
+                </mat-error>
+                <mat-error *ngIf="content.errors.maxlength">
+                  Comment should be maximum
+                  {{ content.errors.maxlength.requiredLength }} characters
+                </mat-error>
+              </ng-container>
+            </mat-form-field>
+          </ng-template>
         </form>
       </mat-dialog-content>
 
