@@ -8,9 +8,10 @@ import { SharedModule } from './../shared/shared.module';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 import { AdminAuthGuard } from './services/admin-auth-guard.service';
+import { AdminCommentsComponent } from './components/admin-comments/admin-comments.component';
 
 @NgModule({
-  declarations: [AdminUsersComponent],
+  declarations: [AdminUsersComponent, AdminCommentsComponent],
   imports: [
     CommonModule,
     MaterialModule,

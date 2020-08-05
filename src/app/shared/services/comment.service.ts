@@ -10,6 +10,11 @@ export class CommentService extends CrudService {
   constructor(http: HttpClient) {
     super(http);
   }
+
+  async getAll() {
+    return this.get();
+  }
+
   async create(body) {
     return this.post(body);
   }

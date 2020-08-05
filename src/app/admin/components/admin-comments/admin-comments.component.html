@@ -1,0 +1,109 @@
+<div class="container">
+  <div fxLayout="column" fxLayoutAlign="space-evenly center" class="my-3">
+    <h1>Letters</h1>
+    <h2 *ngIf="!tableLetters.length && !isLoading">
+      Content has not been found
+    </h2>
+
+    <ng-container *ngIf="isLoading">
+      <mat-spinner mode="indeterminate" diameter="70"></mat-spinner>
+      <h2>Loading data</h2>
+    </ng-container>
+  </div>
+  <div class="row">
+    <div class="col-md"></div>
+    <div class="mat-elevation-z8 col-md-11">
+      <mat-form-field class="mt-2">
+        <mat-label>Filter</mat-label>
+        <input
+          matInput
+          (keyup)="applyFilter($event)"
+          placeholder="Filter"
+          #input
+        />
+      </mat-form-field>
+
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Letter
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.name }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="wordsAmount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Words
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.wordsAmount }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="commentsAmount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Comments
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.commentsAmount }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="repliesAmount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Replies
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.repliesAmount }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="notApprovedCommentsAmount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Not Approved Comments
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.notApprovedCommentsAmount }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="notApprovedRepliesAmount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>
+            Not Approved Replies
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            {{ row.notApprovedRepliesAmount }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>
+            Actions
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button
+              [disabled]="row.notApprovedCommentsAmount + row.notApprovedRepliesAmount === 0"
+              (click)="approveLetterContent(row._id)"
+              mat-mini-fab
+              class="fab-preview"
+            >
+              <mat-icon class="icon-preview">thumb_up_alt</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">
+            No data matching the filter "{{ input.value }}"
+          </td>
+        </tr>
+      </mat-table>
+
+      <mat-paginator [pageSizeOptions]="[6, 12, 25, 100]"></mat-paginator>
+    </div>
+    <div class="col-md"></div>
+  </div>
+</div>

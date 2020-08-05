@@ -80,8 +80,10 @@
             *ngIf="comment?.replies.length"
             [expanded]="updatedCommentId === comment._id ? true : false"
           >
-          
-            <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
+            <mat-expansion-panel-header
+              [collapsedHeight]="'70px'"
+              [expandedHeight]="'70px'"
+            >
               <mat-panel-title>
                 See all replies
               </mat-panel-title>
@@ -219,18 +221,21 @@
             </div>
 
             <mat-expansion-panel
-              *ngIf="comment?.replies.length"
+              *ngIf="comment?.replies.length && getCommentRepliesCounter(comment) !== 0"
               class="mb-2"
               [expanded]="updatedCommentId === comment._id ? true : false"
             >
-              <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
+              <mat-expansion-panel-header
+                [collapsedHeight]="'70px'"
+                [expandedHeight]="'70px'"
+              >
                 <mat-panel-title>
                   See all replies
                 </mat-panel-title>
                 <mat-panel-description>
                   <mat-icon
                     matBadgeColor="accent"
-                    [matBadge]="comment?.replies.length"
+                    [matBadge]="getCommentRepliesCounter(comment)"
                     >insert_comment</mat-icon
                   >
                 </mat-panel-description>

@@ -34,6 +34,7 @@ export abstract class CrudService<T = any> {
     return response;
   }
 
+  
   public async patchById(body, id: number | string): Promise<any> {
     let response = null;
     try {

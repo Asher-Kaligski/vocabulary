@@ -1,3 +1,4 @@
+import { AdminCommentsComponent } from './components/admin-comments/admin-comments.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserFormComponent } from 'shared/components/user-form/user-form.component';
@@ -15,6 +16,11 @@ const routes: Routes = [
   {
     path: 'admin/users',
     component: AdminUsersComponent,
+    canActivate: [AuthGuard, AdminAuthGuard],
+  },
+  {
+    path: 'admin/comments',
+    component: AdminCommentsComponent,
     canActivate: [AuthGuard, AdminAuthGuard],
   },
 ];

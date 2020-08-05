@@ -106,6 +106,18 @@ export class LetterComponent implements OnInit, OnDestroy {
     }
   }
 
+  getCommentRepliesCounter(comment: Comment) {
+    return comment.replies.reduce((accumulator, reply) => {
+      if (
+        reply.isApproved ||
+        (this.authService.isLogged() &&
+          reply.user._id === this.authService.currentUser._id)
+      )
+        return accumulator + 1;
+      else return accumulator;
+    }, 0);
+  }
+
   getCountNotApprovedReplies(comment: Comment) {
     return comment.replies.reduce((accumulator, reply) => {
       if (!reply.isApproved) return accumulator + 1;

@@ -1,32 +1,31 @@
 <mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-around center">
   <div>
-  <a
-    mat-mini-fab
-    [ngClass.gt-sm]="'ml-4'"
-    class="logo-icon"
-    routerLink="/"
-    color="primary"
-  >
-    <mat-icon>language</mat-icon>
-  </a>
-  <span *ngIf="media.isActive('md') || media.isActive('lg')" class="ml-2"
-    >Словарь</span
-  >
-</div>
-  
+    <a
+      mat-mini-fab
+      [ngClass.gt-sm]="'ml-4'"
+      class="logo-icon"
+      routerLink="/"
+      color="primary"
+    >
+      <mat-icon>language</mat-icon>
+    </a>
+    <span *ngIf="media.isActive('md') || media.isActive('lg')" class="ml-2"
+      >Словарь</span
+    >
+  </div>
 
   <mat-form-field class="example-full-width mx-3">
-    <input matInput type="text" (keydown.enter)="search(input)" placeholder="Search" #input >
-    <button  mat-button  
-            matSuffix
-            mat-icon-button 
-            (click)="search(input)"
-            
-            >
+    <input
+      matInput
+      type="text"
+      (keydown.enter)="search(input)"
+      placeholder="Search"
+      #input
+    />
+    <button mat-button matSuffix mat-icon-button (click)="search(input)">
       <mat-icon class="search-icon">search</mat-icon>
     </button>
   </mat-form-field>
-
 
   <a
     *ngIf="!authService.isLogged(); else logged"
@@ -35,21 +34,22 @@
   >
     <mat-icon>person</mat-icon>
   </a>
-  
-  <ng-template #logged  >
+
+  <ng-template #logged>
     <div fxLayout="row" fxLayoutAlign="end center" class="ml-3">
-    <p *ngIf="!media.isActive('xs')" class="mt-3">{{ authService.currentUser.firstName }}</p>
+      <p *ngIf="!media.isActive('xs')" class="mt-3">
+        {{ authService.currentUser.firstName }}
+      </p>
 
-    <a
-      mat-mini-fab
-      [matMenuTriggerFor]="userProfileMenu"
-      class="ml-2"
-      color="primary"
-      ><mat-icon class="icon-avatar">face</mat-icon></a
-    >
-  </div>
+      <a
+        mat-mini-fab
+        [matMenuTriggerFor]="userProfileMenu"
+        class="ml-2"
+        color="primary"
+        ><mat-icon class="icon-avatar">face</mat-icon></a
+      >
+    </div>
   </ng-template>
-
 
   <button
     mat-icon-button
@@ -78,13 +78,15 @@
       <mat-icon>list</mat-icon>
       <span>Manage Letters</span></a
     >
+     -->
+
     <a
       mat-menu-item
       routerLink="/admin/comments"
       routerLinkActive="active-list-item"
     >
-      <mat-icon>shopping_basket</mat-icon><span>Manage Comments</span></a
-    > -->
+      <mat-icon>insert_comment</mat-icon><span>Manage Comments</span></a
+    >
     <a
       mat-menu-item
       routerLink="/admin/users"

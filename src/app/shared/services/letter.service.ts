@@ -11,12 +11,20 @@ export class LetterService extends CrudService {
     super(http);
   }
 
+  async approveAll(letterId) {
+    return this.patchById({}, 'approve-all/' + letterId);
+  }
+
   async getLettersNames() {
     return this.getById('names');
   }
 
-  getByName(letterName) {
+  async getByName(letterName) {
     return this.getById('?letter=' + letterName);
+  }
+
+  async getAll() {
+    return this.get();
   }
 
   async createOrUpdateWord(letterId: number, form: any) {
