@@ -4,7 +4,7 @@
   <div class="comment mb-3 p-2" [innerHTML]="data.content"></div>
 
   <mat-dialog-content>
-    <form #f="ngForm">
+    <form #f="ngForm" novalidate>
       <div
         *ngIf="!media.isActive('sm') && !media.isActive('xs'); else notMobile"
       >
